@@ -92,7 +92,7 @@ function IdentityPublicZone({
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger asChild>
-								<span className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-v2-bg-page bg-v2-brand-green" />
+								<span className="absolute right-0.5 bottom-0.5 size-3.5 rounded-full border-2 border-v2-bg-card bg-v2-brand-green" />
 							</TooltipTrigger>
 							<TooltipContent side="bottom" className="text-xs">
 								Open to opportunities
@@ -149,16 +149,16 @@ function IdentityPublicZone({
 				) : (
 					occupation &&
 					name && (
-						<p className="max-w-[min(24rem,70cqw)] truncate font-v2-body text-xs font-light leading-snug text-v2-text-secondary">
+						<p className="line-clamp-2 font-v2-body text-sm leading-snug text-v2-text-secondary">
 							{occupation}
 						</p>
 					)
 				)}
 
 				{(location || pending) && (
-					<div className="flex items-center gap-1 text-v2-text-muted">
-						<MapPin size={11} className="shrink-0 opacity-60" />
-						<span className="font-v2-body text-xs font-light">
+					<div className="mt-0.5 flex items-center gap-2 text-v2-text-secondary">
+						<MapPin size={16} className="shrink-0 text-v2-text-primary" />
+						<span className="font-v2-body text-sm">
 							{location || <Skeleton className="inline-block h-2.5 w-24 align-middle" />}
 						</span>
 					</div>

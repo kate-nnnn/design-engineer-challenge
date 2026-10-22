@@ -153,11 +153,11 @@ function TalentProfileContent({
 	const factsProps = { preferences, yearsExperience: header.yearsExperience };
 
 	return (
-		<div className="mx-auto flex w-full max-w-230 flex-col gap-4 px-5 pt-8 pb-6 sm:px-8">
+		<div className="mx-auto flex w-full max-w-230 flex-col gap-4 px-5 pt-5 pb-6 sm:px-8">
 			{tracking && <TrackOrgTalentView tracking={tracking} />}
 			{aboveHeader && <div className="flex items-center">{aboveHeader}</div>}
-			<Card variant="flat" className="overflow-hidden border-v2-border-pane">
-				<div className="px-5 pt-5 pb-4">
+			<Card variant="flat" className="overflow-visible border-0 bg-transparent">
+				<div className="pb-4">
 					<IdentityPublicZone
 						data={headerData}
 						displayNameOverride={displayNameOverride}
@@ -179,7 +179,7 @@ function TalentProfileContent({
 					/>
 				</div>
 				{hasFacts(factsProps) && (
-					<div className="px-5 pb-5">
+					<div className="pb-1">
 						<IdentityFactsRow {...factsProps} />
 					</div>
 				)}

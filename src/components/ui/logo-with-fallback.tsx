@@ -37,7 +37,7 @@ function LogoWithFallback({
 			role="img"
 			aria-label={alt}
 			className={cn(
-				"relative flex shrink-0 items-center justify-center overflow-hidden rounded-v2-md border border-v2-border-warm bg-v2-bg-card",
+				"relative flex shrink-0 items-center justify-center overflow-hidden rounded-v2-md bg-v2-bg-active",
 				sizeClassName,
 				className,
 				isInteractive && "transition-opacity hover:opacity-80",
@@ -45,7 +45,7 @@ function LogoWithFallback({
 		>
 			<span
 				aria-hidden="true"
-				className={cn("font-v2-body font-medium text-v2-text-muted", fallbackTextClassName ?? "text-base")}
+				className={cn("font-v2-body font-medium text-v2-text-secondary", fallbackTextClassName ?? "text-base")}
 			>
 				{fallbackInitial.toUpperCase()}
 			</span>

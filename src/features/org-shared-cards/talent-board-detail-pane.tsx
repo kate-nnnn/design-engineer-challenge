@@ -62,7 +62,7 @@ function TalentBoardDetailPane({
 				) : (
 					<>
 						{isError && errorFallback ? (
-							<div className="mx-auto flex w-full max-w-230 flex-col gap-4 px-5 pt-8 sm:px-8">
+							<div className="mx-auto flex w-full max-w-230 flex-col gap-4 px-5 pt-5 sm:px-8">
 								{errorFallback({ notFound: isNotFound(error), retry: () => void refetch() })}
 								{profileBelowFacts}
 							</div>

@@ -45,7 +45,7 @@ function TimelineRow({
 	const tone = durationTone ?? (isShort ? "error" : "active");
 
 	return (
-		<div className="flex gap-3 px-4 py-2.5 sm:px-5">
+		<div className="flex items-start gap-3 py-2.5">
 			<LogoWithFallback
 				src={logoSrc}
 				alt={logoAlt}
