@@ -78,7 +78,7 @@ function IdentityPublicZone({
 	const location = compactLocation(data.location);
 
 	return (
-		<div className={cn("@container flex items-center gap-3.5", className)}>
+		<div className={cn("@container flex flex-wrap items-center gap-3.5", className)}>
 			<div className="relative shrink-0">
 				<UserAvatar
 					src={data.avatarUrl}
@@ -192,7 +192,8 @@ function IdentityPublicZone({
 				)}
 			</div>
 
-			{headerActions && <div className="shrink-0 self-start">{headerActions}</div>}
+			{/* On narrow panes the links drop under the name instead of squeezing it. */}
+			{headerActions && <div className="shrink-0 self-start @max-md:basis-full">{headerActions}</div>}
 		</div>
 	);
 }

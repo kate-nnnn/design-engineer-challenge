@@ -25,6 +25,8 @@ export default async function OrgReviewPage({
 	const { role, talent: talentId, view, streams, sendout } = await searchParams;
 	const access = await requireOrgAccess(orgId);
 	const viewerIsPlatformAdmin = access.success === true && access.isAdmin === true;
+	// Viewers can read the queue but every decision returns 403, so the UI says so up front.
+	const canDecide = access.success === true && access.orgRole !== "viewer";
 
 	return (
 		<Suspense fallback={<Loading />}>
@@ -36,6 +38,7 @@ export default async function OrgReviewPage({
 				streams={streams}
 				sendout={sendout}
 				viewerIsPlatformAdmin={viewerIsPlatformAdmin}
+				canDecide={canDecide}
 			/>
 		</Suspense>
 	);
@@ -49,6 +52,7 @@ async function OrgReviewContent({
 	streams,
 	sendout,
 	viewerIsPlatformAdmin,
+	canDecide,
 }: {
 	orgId: string;
 	role?: string;
@@ -57,6 +61,7 @@ async function OrgReviewContent({
 	streams?: string;
 	sendout?: string;
 	viewerIsPlatformAdmin: boolean;
+	canDecide: boolean;
 }) {
 	const roleId = role === "all" ? undefined : role;
 	const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Number.POSITIVE_INFINITY } } });
@@ -86,6 +91,7 @@ async function OrgReviewContent({
 					sendoutTalentIds={sendoutScope?.talentIds}
 					canUseTalentSearch={canUseTalentSearch}
 					viewerIsPlatformAdmin={viewerIsPlatformAdmin}
+					canDecide={canDecide}
 				/>
 			</AdminPageShell>
 		</HydrationBoundary>

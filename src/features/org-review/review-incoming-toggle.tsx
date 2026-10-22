@@ -2,37 +2,42 @@
 
 import { cn } from "@v2/lib/utils";
 
+export type ReviewView = "review" | "passed" | "invited";
+
 interface ReviewIncomingToggleProps {
-	showPassed: boolean;
-	onChange: (showPassed: boolean) => void;
-	/** Shown next to "To review", e.g. "12" or "12+" when the feed is paged. */
-	unreviewedCount?: string;
+	view: ReviewView;
+	onChange: (view: ReviewView) => void;
+	counts: Partial<Record<ReviewView, number>>;
 }
+
+const TABS: Array<{ id: ReviewView; label: string }> = [
+	{ id: "review", label: "To review" },
+	{ id: "passed", label: "Passed" },
+	{ id: "invited", label: "Invited" },
+];
 
 const TAB = "inline-flex items-start gap-1 font-v2-body text-xl font-medium tracking-tight transition-colors";
 
-export function ReviewIncomingToggle({ showPassed, onChange, unreviewedCount }: ReviewIncomingToggleProps) {
+export function ReviewIncomingToggle({ view, onChange, counts }: ReviewIncomingToggleProps) {
 	return (
-		<div role="tablist" aria-label="Candidates" className="flex items-end gap-8">
-			<button
-				type="button"
-				role="tab"
-				aria-selected={!showPassed}
-				className={cn(TAB, showPassed ? "text-v2-text-muted hover:text-v2-text-secondary" : "text-v2-text-primary")}
-				onClick={() => onChange(false)}
-			>
-				To review
-				{unreviewedCount && <sup className="mt-0.5 text-sm font-normal tabular-nums">{unreviewedCount}</sup>}
-			</button>
-			<button
-				type="button"
-				role="tab"
-				aria-selected={showPassed}
-				className={cn(TAB, showPassed ? "text-v2-text-primary" : "text-v2-text-muted hover:text-v2-text-secondary")}
-				onClick={() => onChange(true)}
-			>
-				Passed
-			</button>
+		<div role="tablist" aria-label="Candidates" className="flex items-end gap-5">
+			{TABS.map((tab) => {
+				const active = view === tab.id;
+				const count = counts[tab.id];
+				return (
+					<button
+						key={tab.id}
+						type="button"
+						role="tab"
+						aria-selected={active}
+						className={cn(TAB, active ? "text-v2-text-primary" : "text-v2-text-muted hover:text-v2-text-secondary")}
+						onClick={() => onChange(tab.id)}
+					>
+						{tab.label}
+						{count !== undefined && <sup className="mt-0.5 text-sm font-normal tabular-nums">{count}</sup>}
+					</button>
+				);
+			})}
 		</div>
 	);
 }

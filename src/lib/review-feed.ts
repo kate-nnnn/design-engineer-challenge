@@ -21,6 +21,8 @@ export interface ReviewItem {
 	receivedAt: string | null;
 	companies: { name: string; logoUrl: string | null }[];
 	school: { name: string; logoUrl: string | null } | null;
+	/** Clera's evaluation of fit for the role, 0–100. Missing when the platform hasn't scored them. */
+	matchScore?: number | null;
 }
 
 export interface ReviewBucketCounts {

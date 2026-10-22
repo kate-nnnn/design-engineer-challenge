@@ -32,7 +32,7 @@ export function ReviewRoleFilter({ orgId, roleId, byRole, onChange }: ReviewRole
 		<Select value={roleId ?? ALL_ROLES_PARAM} onValueChange={handleChange} disabled={isLoading}>
 			<SelectTrigger
 				size="compact"
-				className="h-7 w-auto min-w-52 max-w-xs border border-v2-border-default bg-transparent"
+				className="h-9 w-auto min-w-52 max-w-xs rounded-v2-md border border-v2-border-default bg-v2-bg-card px-3"
 			>
 				<SelectValue placeholder="All roles" className="whitespace-nowrap" />
 			</SelectTrigger>

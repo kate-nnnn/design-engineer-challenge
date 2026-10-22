@@ -3,7 +3,8 @@
 import { Github, Globe, Linkedin, Twitter } from "lucide-react";
 import { Button } from "@v2/components/ui/button";
 import type { ReactNode } from "react";
-import { ensureProtocol, extractHost, hostRepeatsLabel } from "../../utils/external-links";
+import { extractHost, hostRepeatsLabel } from "../../utils/external-links";
+import { usableHref } from "../../utils/usable-href";
 
 interface HeaderProfileLinksProps {
 	linkedinUrl?: string | null;
@@ -12,7 +13,12 @@ interface HeaderProfileLinksProps {
 	portfolioUrl: string | null;
 }
 
-function HeaderProfileLinks({ linkedinUrl = null, githubUrl, xUrl, portfolioUrl }: HeaderProfileLinksProps) {
+function HeaderProfileLinks(props: HeaderProfileLinksProps) {
+	// Broken links are dropped rather than shown as buttons that go nowhere.
+	const linkedinUrl = usableHref(props.linkedinUrl);
+	const githubUrl = usableHref(props.githubUrl);
+	const xUrl = usableHref(props.xUrl);
+	const portfolioUrl = usableHref(props.portfolioUrl);
 	if (!linkedinUrl && !githubUrl && !xUrl && !portfolioUrl) return null;
 
 	return (
@@ -38,7 +44,7 @@ function HeaderLinkButton({ href, label, icon, hideHost = false }: HeaderLinkBut
 	const showHost = !hideHost && host.length > 0 && !hostRepeatsLabel(host, label);
 	return (
 		<Button asChild variant="ghost" size="sm" className="gap-1.5 px-3" title={`Open ${label}`}>
-			<a href={ensureProtocol(href)} target="_blank" rel="noopener noreferrer">
+			<a href={href} target="_blank" rel="noopener noreferrer">
 				{icon}
 				{label}
 				{showHost && <span className="max-w-45 truncate text-v2-text-tertiary">{host}</span>}

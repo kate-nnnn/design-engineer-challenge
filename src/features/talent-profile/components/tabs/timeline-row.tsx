@@ -14,6 +14,8 @@ interface TimelineRowProps {
 	subtitle?: React.ReactNode;
 	startDate: string | null;
 	endDate: string | null;
+	/** The job is over even though endDate is missing. */
+	ended?: boolean;
 	dateFormat?: "month-year" | "year";
 	duration?: string | null;
 	durationTone?: "active" | "error" | "neutral" | "warning" | "info" | "muted";
@@ -30,13 +32,15 @@ function TimelineRow({
 	subtitle,
 	startDate,
 	endDate,
+	ended = false,
 	dateFormat = "month-year",
 	duration,
 	durationTone,
 	children,
 }: TimelineRowProps) {
-	const dateRange = dateRangeLabel(startDate, endDate, dateFormat);
-	const durationText = duration ?? durationLabel(startDate, endDate);
+	const dateRange = dateRangeLabel(startDate, endDate, dateFormat, ended);
+	// Without an end date a finished job's length is unknown, not "until today".
+	const durationText = ended && !endDate ? null : (duration ?? durationLabel(startDate, endDate));
 	const isShort = durationText && !durationText.includes("y") && Number.parseInt(durationText, 10) < 6;
 	const tone = durationTone ?? (isShort ? "error" : "active");
 

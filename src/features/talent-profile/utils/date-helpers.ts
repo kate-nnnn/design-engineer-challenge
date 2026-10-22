@@ -13,12 +13,21 @@ function durationLabel(start: string | null, end: string | null): string | null 
 	return `${months}m`;
 }
 
-function dateRangeLabel(start: string | null, end: string | null, format: "month-year" | "year"): string | null {
+/**
+ * `ended` marks a job that is over but has no end date, so it reads "end date unknown"
+ * instead of "Present". A role with no dates at all reads "Dates unknown".
+ */
+function dateRangeLabel(
+	start: string | null,
+	end: string | null,
+	format: "month-year" | "year",
+	ended = false,
+): string | null {
 	const formatBound = format === "year" ? formatCalendarYear : formatMonthYear;
 	const startLabel = formatBound(start);
 	const endLabel = formatBound(end);
-	if (!startLabel) return endLabel;
-	return `${startLabel} — ${endLabel || "Present"}`;
+	if (!startLabel) return endLabel ?? "Dates unknown";
+	return `${startLabel} — ${endLabel || (ended ? "end date unknown" : "Present")}`;
 }
 
 export { dateRangeLabel, durationLabel };

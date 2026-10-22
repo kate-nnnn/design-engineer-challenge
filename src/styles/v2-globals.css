@@ -1205,24 +1205,24 @@
    ============================================ */
 
 :root {
-	--v2-brand-teal: #039365;
-	--v2-brand-teal-dark: #027a54;
-	--v2-brand-teal-bright: #039365;
+	--v2-brand-teal: #005a5f;
+	--v2-brand-teal-dark: #003639;
+	--v2-brand-teal-bright: #005a5f;
 	--v2-brand-green: #039365;
-	--v2-brand-teal-badge: #039365;
+	--v2-brand-teal-badge: #106367;
 	--v2-brand-cream: #ffffff;
-	--v2-ai-neon: #4cc38a;
-	--v2-ai-glow: 0 0 0 1px rgba(76, 195, 138, 0.45), 0 6px 24px rgba(76, 195, 138, 0.22);
+	--v2-ai-neon: #3f9e95;
+	--v2-ai-glow: 0 0 0 1px rgba(63, 158, 149, 0.4), 0 6px 24px rgba(63, 158, 149, 0.2);
 	/* Decision buttons: equal-weight light tints with dark text, red for pass, brand green for intro. */
 	--v2-pass-bg: #fdf0f0;
 	--v2-pass-bg-hover: #fbe3e3;
 	--v2-pass-border: #f3c6c6;
 	--v2-pass-text: #b42318;
-	--v2-intro-bg: #eaf7f0;
-	--v2-intro-bg-hover: #dcf1e6;
-	--v2-intro-border: #b4e0ca;
-	--v2-intro-text: #027a54;
-	--v2-intro-glow: 0 0 0 1px rgba(3, 147, 101, 0.18), 0 10px 32px rgba(3, 147, 101, 0.16);
+	--v2-intro-bg: #e8f4f4;
+	--v2-intro-bg-hover: #daedee;
+	--v2-intro-border: #b3d6d7;
+	--v2-intro-text: #004e52;
+	--v2-intro-glow: 0 0 0 1px rgba(0, 90, 95, 0.18), 0 10px 32px rgba(0, 90, 95, 0.14);
 	--v2-pass-glow: 0 0 0 1px rgba(220, 38, 38, 0.16), 0 10px 32px rgba(220, 38, 38, 0.14);
 
 	--v2-bg-page: #ffffff;
@@ -1231,7 +1231,7 @@
 	--v2-bg-blush: #f6f6f6;
 	--v2-bg-input: #f6f6f6;
 	--v2-bg-input-solid: #f6f6f6;
-	--v2-bg-badge-teal: #e8f6ee;
+	--v2-bg-badge-teal: #daf2f3;
 	--v2-bg-active: #f1f1f1;
 	--v2-bg-chat: #f6f6f6;
 	--v2-bg-modal-header: #f6f6f6;
@@ -1243,7 +1243,7 @@
 	--v2-text-tertiary: #6b6b6b;
 	--v2-text-muted: #6b6b6b;
 	--v2-text-placeholder: #8a8a8a;
-	--v2-text-brand: #027a54;
+	--v2-text-brand: #004e52;
 	--v2-text-brand-green: #027a54;
 
 	--v2-border-warm: transparent;
@@ -1251,7 +1251,7 @@
 	--v2-border-divider: transparent;
 	--v2-border-default: #e6e6e6;
 	--v2-border-medium: #d6d6d6;
-	--v2-border-active: #027a54;
+	--v2-border-active: #005a5f;
 	--v2-border-pane: #ececec;
 
 	--v2-status-active: #027a54;
@@ -1277,11 +1277,12 @@
 
 :root[data-v2-theme="dark"],
 :root.dark {
-	--v2-brand-teal: #039365;
-	--v2-brand-teal-dark: #027a54;
-	--v2-brand-teal-bright: #039365;
+	--v2-brand-teal: #0e7280;
+	--v2-brand-teal-dark: #005a5f;
+	--v2-brand-teal-bright: #0e7280;
 	--v2-brand-green: #22c55e;
-	--v2-ai-glow: 0 0 0 1px rgba(76, 195, 138, 0.4), 0 6px 28px rgba(76, 195, 138, 0.16);
+	--v2-ai-neon: #5ccfda;
+	--v2-ai-glow: 0 0 0 1px rgba(92, 207, 218, 0.35), 0 6px 28px rgba(92, 207, 218, 0.14);
 
 	--v2-identicon-1: #70849b;
 	--v2-identicon-2: #537b78;
@@ -1294,10 +1295,10 @@
 	--v2-pass-bg-hover: rgba(239, 68, 68, 0.16);
 	--v2-pass-border: rgba(239, 68, 68, 0.3);
 	--v2-pass-text: #f87171;
-	--v2-intro-bg: rgba(3, 147, 101, 0.14);
-	--v2-intro-bg-hover: rgba(3, 147, 101, 0.22);
-	--v2-intro-border: rgba(3, 147, 101, 0.4);
-	--v2-intro-text: #4ade80;
+	--v2-intro-bg: rgba(14, 114, 128, 0.22);
+	--v2-intro-bg-hover: rgba(14, 114, 128, 0.32);
+	--v2-intro-border: rgba(92, 207, 218, 0.35);
+	--v2-intro-text: #5ccfda;
 
 	--v2-bg-page: #151515;
 	--v2-bg-card: #151515;
@@ -1305,7 +1306,7 @@
 	--v2-bg-blush: #1e1e1e;
 	--v2-bg-input: #1e1e1e;
 	--v2-bg-input-solid: #1e1e1e;
-	--v2-bg-badge-teal: rgba(19, 163, 95, 0.16);
+	--v2-bg-badge-teal: rgba(0, 78, 82, 0.3);
 	--v2-bg-active: #222222;
 	--v2-bg-chat: #1e1e1e;
 	--v2-bg-modal-header: #1e1e1e;
@@ -1319,7 +1320,7 @@
 	--v2-text-muted: #8c8c8c;
 	--v2-text-placeholder: #737373;
 	--v2-text-inverse: #ffffff;
-	--v2-text-brand: #4ade80;
+	--v2-text-brand: #5ccfda;
 	--v2-text-brand-green: #4ade80;
 
 	--v2-border-warm: transparent;
@@ -1327,7 +1328,7 @@
 	--v2-border-divider: transparent;
 	--v2-border-default: #2a2a2a;
 	--v2-border-medium: #333333;
-	--v2-border-active: #13a35f;
+	--v2-border-active: #0e7280;
 	--v2-border-pane: #262626;
 
 	--v2-status-active: #4ade80;
@@ -1337,4 +1338,17 @@
 	--v2-shadow-card: none;
 	--v2-shadow-gloss: none;
 	--v2-shadow-content: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Secondary controls keep a light grey outline: the warm border is transparent for cards
+   and dividers, but buttons, inputs, dropdown triggers and floating menus still need an edge. */
+:is(button, a, input, textarea, select, [role="button"], [role="combobox"], [role="tab"]):is(
+		.border-v2-border-warm,
+		.border-v2-border-warm-soft
+	),
+:is([role="dialog"], [role="menu"], [role="listbox"], [data-radix-popper-content-wrapper] > *):is(
+		.border-v2-border-warm,
+		.border-v2-border-warm-soft
+	) {
+	border-color: var(--v2-border-default);
 }

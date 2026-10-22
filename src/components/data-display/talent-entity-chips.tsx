@@ -16,7 +16,7 @@ interface TalentEntityChipsProps {
 	maxVisible?: number;
 }
 
-const CHIP = "inline-flex max-w-40 shrink-0 items-center rounded-v2-full bg-v2-bg-active px-2 py-0.5";
+const CHIP = "inline-flex max-w-40 shrink-0 items-center";
 
 export function TalentEntityChips({ companies, school, className, isLoading, maxVisible = 3 }: TalentEntityChipsProps) {
 	if (isLoading && companies.length === 0 && !school) {
@@ -44,7 +44,7 @@ export function TalentEntityChips({ companies, school, className, isLoading, max
 	return (
 		<div
 			className={cn(
-				"flex min-w-0 flex-nowrap items-center gap-1.5 overflow-hidden font-v2-body text-2xs text-v2-text-secondary",
+				"flex min-w-0 flex-nowrap items-center gap-3 overflow-hidden font-v2-body text-xs text-v2-text-secondary",
 				className,
 			)}
 		>

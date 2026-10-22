@@ -2,6 +2,7 @@ export const orgDashboardKeys = {
 	all: ["org-dashboard"] as const,
 	review: (orgId: string, roleId?: string) => [...orgDashboardKeys.all, "review", orgId, roleId] as const,
 	passed: (orgId: string, roleId?: string) => [...orgDashboardKeys.all, "passed", orgId, roleId] as const,
+	invited: (orgId: string, roleId?: string) => [...orgDashboardKeys.all, "invited", orgId, roleId] as const,
 	sendouts: (orgId: string, roleId: string) => [...orgDashboardKeys.all, "sendouts", orgId, roleId] as const,
 	similarPicks: (orgId: string, roleId: string, talentId: string) =>
 		[...orgDashboardKeys.all, "similar-picks", orgId, roleId, talentId] as const,

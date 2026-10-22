@@ -26,6 +26,25 @@ export function removeFromReviewFeed(queryClient: QueryClient, queryKey: QueryKe
 	return previous;
 }
 
+// Puts one item back where it was. Unlike restoring a whole snapshot, this doesn't undo
+// other decisions that were saved while this one was in flight.
+export function restoreToReviewFeed(queryClient: QueryClient, queryKey: QueryKey, item: ReviewItem, index: number) {
+	const current = queryClient.getQueryData<ReviewListData>(queryKey);
+	if (!current) return;
+	if (current.items.some((i) => reviewItemKey(i) === reviewItemKey(item))) return;
+	const items = [...current.items];
+	items.splice(Math.min(Math.max(index, 0), items.length), 0, item);
+	const counts = { ...current.counts, all: current.counts.all + 1 };
+	counts[item.bucket] = counts[item.bucket] + 1;
+	queryClient.setQueryData<ReviewListData>(queryKey, {
+		...current,
+		items,
+		totalCount: current.totalCount + 1,
+		counts,
+		byRole: adjustByRole(current.byRole, item.roleId, 1),
+	});
+}
+
 export function insertIntoReviewFeed(queryClient: QueryClient, queryKey: QueryKey, item: ReviewItem) {
 	const previous = queryClient.getQueryData<ReviewListData>(queryKey);
 	if (!previous) return previous;

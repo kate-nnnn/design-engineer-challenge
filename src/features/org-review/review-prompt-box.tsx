@@ -6,9 +6,9 @@ import { Sparkles, X } from "lucide-react";
 import { type ReviewItem, streamOf } from "./types";
 
 export const QUICK_FILTERS = [
-	{ id: "asked", label: "Asked to meet you", test: (item: ReviewItem) => streamOf(item.bucket) === "interest" },
-	{ id: "picks", label: "Clera's picks", test: (item: ReviewItem) => streamOf(item.bucket) === "curated" },
-	{ id: "drop", label: "This week's drop", test: (item: ReviewItem) => streamOf(item.bucket) === "drop" },
+	{ id: "asked", label: "Wants to meet", test: (item: ReviewItem) => streamOf(item.bucket) === "interest" },
+	{ id: "picks", label: "Top match", test: (item: ReviewItem) => streamOf(item.bucket) === "curated" },
+	{ id: "drop", label: "Weekly pick", test: (item: ReviewItem) => streamOf(item.bucket) === "drop" },
 	{
 		id: "flags",
 		label: "Has something to check",
@@ -46,7 +46,7 @@ export function matchesReviewQuery(item: ReviewItem, query: string, filter: Quic
 
 export function ReviewPromptBox({ value, onChange, activeFilter, onFilterChange }: ReviewPromptBoxProps) {
 	return (
-		<div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-2.5 bg-linear-to-t from-v2-bg-page from-75% to-transparent px-1 pt-12 pb-1">
+		<div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex flex-col gap-2.5 bg-linear-to-t from-v2-bg-page from-75% to-transparent px-4 pt-12 pb-3 lg:absolute lg:z-auto lg:px-1 lg:pb-1">
 			<div className="pointer-events-auto flex gap-1.5 overflow-x-auto [scrollbar-width:none]">
 				{QUICK_FILTERS.map((quick) => {
 					const active = activeFilter === quick.id;

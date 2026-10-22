@@ -7,15 +7,23 @@ import { ReviewDecisionFooter } from "./review-decision-footer";
 import { ReviewFitReason } from "./review-fit-reason";
 import { ReviewHeaderMeta } from "./review-header-meta";
 import { ReviewProfileShell } from "./review-profile-shell";
+import { ReviewProfileUnavailable } from "./review-profile-unavailable";
+import { ReviewViewOnlyNote } from "./review-view-only-note";
 import { streamOf } from "./types";
 
 interface ReviewRightPaneProps {
 	orgId: string;
 	selectedRoleId: string | undefined;
 	viewerIsPlatformAdmin?: boolean;
+	canDecide?: boolean;
 }
 
-export function ReviewRightPane({ orgId, selectedRoleId, viewerIsPlatformAdmin = false }: ReviewRightPaneProps) {
+export function ReviewRightPane({
+	orgId,
+	selectedRoleId,
+	viewerIsPlatformAdmin = false,
+	canDecide = true,
+}: ReviewRightPaneProps) {
 	const board = useReviewBoardContext();
 	const item = board.selected;
 
@@ -34,7 +42,15 @@ export function ReviewRightPane({ orgId, selectedRoleId, viewerIsPlatformAdmin =
 			profileMeta={item ? <ReviewHeaderMeta item={item} orgId={orgId} showRole={!selectedRoleId} /> : null}
 			profileBelowFacts={item ? <ReviewFitReason reason={item.fitReason} /> : null}
 			fallback={item ? <ReviewProfileShell item={item} /> : null}
+			errorFallback={
+				item
+					? ({ notFound, retry }) => <ReviewProfileUnavailable item={item} notFound={notFound} onRetry={retry} />
+					: undefined
+			}
 			decision={
+				!canDecide ? (
+					<ReviewViewOnlyNote orgId={orgId} />
+				) : (
 				<>
 					<ReviewDecisionFooter />
 					{item && !board.panel && (
@@ -52,6 +68,7 @@ export function ReviewRightPane({ orgId, selectedRoleId, viewerIsPlatformAdmin =
 						/>
 					)}
 				</>
+				)
 			}
 		/>
 	);

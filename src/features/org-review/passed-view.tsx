@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowCounterClockwise, WarningCircle } from "@phosphor-icons/react";
+import { CircleAlert, RotateCcw } from "lucide-react";
 import { EmptyState } from "@v2/components/data-display";
 import { Button } from "@v2/components/ui/button";
 import { Card } from "@v2/components/ui/card";
@@ -51,7 +51,7 @@ export function PassedView({ orgId, selectedRoleId, viewerIsPlatformAdmin = fals
 	if (query.isError) {
 		return (
 			<EmptyState
-				icon={<WarningCircle />}
+				icon={<CircleAlert />}
 				heading="Couldn't load passed candidates"
 				description="Something went wrong. Refresh the page to try again."
 			/>
@@ -69,44 +69,42 @@ export function PassedView({ orgId, selectedRoleId, viewerIsPlatformAdmin = fals
 
 	return (
 		<>
-			<Card className="overflow-hidden p-0">
-				<div className="divide-y divide-v2-border-divider">
-					{items.map((item) => {
-						const oppId = item.opportunityId;
-						return (
-							<div key={`${item.talentId}:${oppId}`} className="flex items-center gap-2 pr-3">
-								<div className="min-w-0 flex-1">
-									<ReviewCard
-										item={item}
-										isSelected={selected?.talentId === item.talentId && selected?.opportunityId === oppId}
-										onSelect={() => setSelected(item)}
-										onPrefetch={() => {}}
-										chips={chipsFor(item.talentId)}
-										onVisible={onCardVisible}
-									/>
-								</div>
-								{oppId !== null && (
+			<div className="flex flex-col gap-2">
+				{items.map((item) => {
+					const oppId = item.opportunityId;
+					return (
+						<ReviewCard
+							key={`${item.talentId}:${oppId}`}
+							item={item}
+							isSelected={selected?.talentId === item.talentId && selected?.opportunityId === oppId}
+							onSelect={() => setSelected(item)}
+							onPrefetch={() => {}}
+							chips={chipsFor(item.talentId)}
+							onVisible={onCardVisible}
+							showRole={!selectedRoleId}
+							cornerAction={
+								<div className="flex items-center gap-1.5">
+									{viewerIsPlatformAdmin && (
+										<AdminPassButton orgId={orgId} item={item} roleId={selectedRoleId} className="shrink-0" />
+									)}
 									<Button
 										variant="ghost"
 										size="sm"
-										className="shrink-0 gap-1.5"
+										className="shrink-0 gap-1.5 px-3"
 										onClick={(e) => {
 											e.stopPropagation();
 											unpass.mutate(oppId);
 										}}
 									>
-										<ArrowCounterClockwise size={14} weight="bold" />
+										<RotateCcw size={14} />
 										Bring back
 									</Button>
-								)}
-								{viewerIsPlatformAdmin && (
-									<AdminPassButton orgId={orgId} item={item} roleId={selectedRoleId} className="shrink-0" />
-								)}
-							</div>
-						);
-					})}
-				</div>
-			</Card>
+								</div>
+							}
+						/>
+					);
+				})}
+			</div>
 
 			<OrgTalentProfileSheet
 				open={!!selected}

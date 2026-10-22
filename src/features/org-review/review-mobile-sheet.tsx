@@ -4,6 +4,7 @@ import { TalentDecisionActionBar } from "@v2/features/org-shared-cards";
 import { OrgTalentProfileSheet } from "@v2/features/org-talent-profile";
 import { useReviewBoardContext } from "./review-board-context";
 import { ReviewDecisionFooter } from "./review-decision-footer";
+import { ReviewViewOnlyNote } from "./review-view-only-note";
 import { type ReviewItem, streamOf } from "./types";
 
 interface ReviewMobileSheetProps {
@@ -14,6 +15,7 @@ interface ReviewMobileSheetProps {
 	onClose: () => void;
 	onInterview: (item: ReviewItem) => void;
 	onPass: (item: ReviewItem) => void;
+	canDecide?: boolean;
 }
 
 export function ReviewMobileSheet({
@@ -24,6 +26,7 @@ export function ReviewMobileSheet({
 	onClose,
 	onInterview,
 	onPass,
+	canDecide = true,
 }: ReviewMobileSheetProps) {
 	const board = useReviewBoardContext();
 	return (
@@ -38,7 +41,12 @@ export function ReviewMobileSheet({
 			surface="review"
 			trackingSource={talent?.source ?? null}
 			footer={
-				talent && (
+				talent &&
+				(!canDecide ? (
+					<div className="px-4">
+						<ReviewViewOnlyNote orgId={orgId} />
+					</div>
+				) : (
 					<>
 						<ReviewDecisionFooter />
 						{!board.panel && (
@@ -50,7 +58,7 @@ export function ReviewMobileSheet({
 							/>
 						)}
 					</>
-				)
+				))
 			}
 		/>
 	);

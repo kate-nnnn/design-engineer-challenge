@@ -45,6 +45,8 @@ function ExperienceCard({
 	const [editOpen, setEditOpen] = useState(false);
 	const dbYoe = normalizeYoe(yearsExperience);
 	const recalculateYears = useRecalculateYoe(talentId);
+	// Several jobs marked current at once is worth a second look before an intro.
+	const currentCount = new Set(experiences.filter((exp) => exp.isCurrent).map((exp) => exp.company.name)).size;
 	const tenures = useMemo(
 		() => groupRolesByEmployer(experiences.map((exp) => ({ ...exp, companyName: exp.company.name }))),
 		[experiences],
@@ -54,7 +56,13 @@ function ExperienceCard({
 		<Card variant="flat" className={cn("overflow-hidden", className)}>
 			<ProfileCardHeader icon={Briefcase} title="Experience">
 				<div className="flex items-center gap-1.5">
+					{currentCount > 1 && (
+						<span className="rounded-v2-full bg-v2-status-warning-bg px-2 py-0.5 font-v2-body text-2xs text-v2-status-warning">
+							{currentCount} current roles
+						</span>
+					)}
 					{dbYoe !== null &&
+						dbYoe > 0 &&
 						(showYoeInternals ? (
 							<YoeHistoryPopover talentId={talentId} yearsExperience={dbYoe} onEditClick={() => setEditOpen(true)} />
 						) : (
@@ -85,7 +93,7 @@ function ExperienceCard({
 				</div>
 			) : tenures.length === 0 ? (
 				<div className="pb-3">
-					<p className="font-v2-body text-xs text-v2-text-muted">No experience data available.</p>
+					<p className="font-v2-body text-sm text-v2-text-secondary">No work history yet.</p>
 				</div>
 			) : (
 				<>

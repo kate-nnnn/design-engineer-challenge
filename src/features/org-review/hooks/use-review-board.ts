@@ -21,6 +21,8 @@ import { useReviewItems } from "./use-review-items";
 import { useRoleIntroReadiness } from "./use-role-intro-readiness";
 import { useSimilarFollowThrough } from "./use-similar-follow-through";
 
+const STREAM_PRIORITY: Record<ReviewStream, number> = { interest: 0, curated: 1, drop: 2 };
+
 export type ReviewPanelState = { mode: "pass" | "intro"; item: ReviewItem; roleIdOverride?: string };
 
 const EMPTY_BY_ROLE: ReviewListData["byRole"] = {};
@@ -120,8 +122,17 @@ export function useReviewBoard(
 		return sendoutScope ? all.filter((item) => sendoutScope.has(item.talentId)) : all;
 	}, [data, sendoutScope]);
 	const feedTalentIds = useMemo(() => new Set((data?.items ?? []).map((item) => item.talentId)), [data]);
+	// Best evaluated first: Clera's match score, then the stronger source (asked to meet you,
+	// role picks, weekly drop) for ties or unscored people. Keyboard next/previous follows this order.
 	const items = useMemo(
-		() => feed.filter((i) => streams.includes(streamOf(i.bucket)) && reviewItemKey(i) !== heldKey),
+		() =>
+			feed
+				.filter((i) => streams.includes(streamOf(i.bucket)) && reviewItemKey(i) !== heldKey)
+				.sort(
+					(a, b) =>
+						(b.matchScore ?? -1) - (a.matchScore ?? -1) ||
+						STREAM_PRIORITY[streamOf(a.bucket)] - STREAM_PRIORITY[streamOf(b.bucket)],
+				),
 		[feed, streams, heldKey],
 	);
 	const roleFeedCount = data?.items?.length ?? 0;
@@ -326,6 +337,8 @@ export function useReviewBoard(
 	return {
 		items,
 		truncated: data?.truncated ?? false,
+		/** Everyone waiting for this scope, including people beyond the loaded page. */
+		totalCount: data?.totalCount ?? items.length,
 		isLoading,
 		isSwitching: isPlaceholderData,
 		chipsFor,

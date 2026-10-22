@@ -18,7 +18,7 @@ export function ReviewStreamFilter({ streams, counts, onChange }: ReviewStreamFi
 			label="Candidate type"
 			isActive={filtered}
 			activeFilterCount={filtered ? streams.length : 0}
-			className="h-7 border-solid"
+			className="h-9 rounded-v2-md border border-solid border-v2-border-default bg-v2-bg-card px-3"
 			contentClassName="w-60"
 		>
 			<CheckboxFilter

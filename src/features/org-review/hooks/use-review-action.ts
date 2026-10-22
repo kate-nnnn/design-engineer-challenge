@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { orgDashboardKeys } from "@/lib/query-keys";
 import { organizations } from "@/services/api";
 import { type ReviewItem, reviewItemKey } from "../types";
-import { removeFromReviewFeed } from "./feed-cache";
+import { removeFromReviewFeed, restoreToReviewFeed } from "./feed-cache";
 import { invalidateOrgDashboard } from "./invalidate-org-dashboard";
 
 interface ReviewActionPayload {
@@ -66,13 +66,22 @@ export function useReviewAction(orgId: string, roleId?: string, callbacks?: Revi
 			if (!result.ok) throw new Error(result.error.message);
 			return result.data;
 		},
+		// One quiet retry covers most flaky-network blips before the hiring manager ever sees an error.
+		retry: (failureCount, error) =>
+			failureCount < 1 &&
+			!(error instanceof Error && (error.message.includes(TALENT_NOT_OPEN_ERROR) || error.message === "missing_role")),
+		retryDelay: 700,
 		onMutate: async ({ item, action }) => {
 			setPendingKeys((prev) => new Set(prev).add(reviewItemKey(item)));
 			await queryClient.cancelQueries({ queryKey });
+			const index =
+				queryClient
+					.getQueryData<{ items: ReviewItem[] }>(queryKey)
+					?.items.findIndex((i) => reviewItemKey(i) === reviewItemKey(item)) ?? 0;
 			const previous = removeFromReviewFeed(queryClient, queryKey, item);
 			const toastId = `review-action:${reviewItemKey(item)}`;
 			if (action !== "request_intro") callbacks?.onPassed?.({ toastId, item, opportunityId: item.opportunityId });
-			return { previous, toastId };
+			return { previous, toastId, index };
 		},
 		onSuccess: (_data, { item, action }) => {
 			posthog?.capture(
@@ -82,12 +91,22 @@ export function useReviewAction(orgId: string, roleId?: string, callbacks?: Revi
 				{ org_id: orgId, role_id: item.roleId, talent_id: item.talentId, surface: "review" },
 			);
 		},
-		onError: (error, _variables, context) => {
-			if (context?.previous) queryClient.setQueryData(queryKey, context.previous);
+		onError: (error, variables, context) => {
+			const { item, action } = variables;
+			// Only this person comes back, in their old spot. Selection stays on whoever you moved on to.
+			restoreToReviewFeed(queryClient, queryKey, item, context?.index ?? 0);
 			callbacks?.onFailed?.();
 			const notOpen = error instanceof Error && error.message.includes(TALENT_NOT_OPEN_ERROR);
-			toast.error(notOpen ? "This candidate is not currently open to opportunities." : "Something went wrong", {
+			if (notOpen) {
+				toast.error(`${item.talentName} isn't open to opportunities right now.`, { id: context?.toastId });
+				return;
+			}
+			const what = action === "request_intro" ? `request an intro to ${item.talentName}` : `pass on ${item.talentName}`;
+			toast.error(`Couldn't ${what}`, {
 				id: context?.toastId,
+				description: "They're back in your list. Nothing was sent.",
+				duration: 10_000,
+				action: { label: "Retry", onClick: () => mutation.mutate(variables) },
 			});
 		},
 		onSettled: (_data, _error, { item }) => {

@@ -57,6 +57,7 @@ function ExperienceRow({ exp, showFundingAmount }: ExperienceRowProps) {
 				}
 				startDate={exp.startDate}
 				endDate={exp.endDate}
+				ended={!exp.isCurrent}
 				dateFormat="month-year"
 			>
 				<ExperienceFirmographicsTags exp={exp} showFundingAmount={showFundingAmount} />

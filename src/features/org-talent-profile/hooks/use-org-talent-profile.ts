@@ -1,6 +1,7 @@
 import { type QueryClient, useQuery } from "@tanstack/react-query";
 import { orgTalentKeys } from "@/lib/query-keys";
 import { unwrap } from "@/services/api";
+import { ApiRequestError } from "@/services/api/client";
 import { orgTalents } from "@/services/api/org-talents";
 
 const STALE_TIME = 5 * 60 * 1000;
@@ -15,7 +16,13 @@ export function useOrgTalentProfile(orgId: string, talentId: string) {
 		queryFn: () => profileQueryFn(orgId, talentId),
 		staleTime: STALE_TIME,
 		enabled: !!orgId && !!talentId,
+		// A missing profile stays missing; retrying only keeps the pane in a loading state.
+		retry: (failureCount, error) => !isNotFound(error) && failureCount < 2,
 	});
+}
+
+export function isNotFound(error: unknown): boolean {
+	return error instanceof ApiRequestError && error.status === 404;
 }
 
 export function prefetchOrgTalentProfile(queryClient: QueryClient, orgId: string, talentId: string) {

@@ -25,13 +25,16 @@ import { useDefaultReviewRole } from "./hooks/use-default-review-role";
 import { usePrefetchNextProfile } from "./hooks/use-prefetch-next-profile";
 import { useReviewBoard } from "./hooks/use-review-board";
 import { useSendoutLists } from "./hooks/use-sendout-lists";
+import { InvitedView } from "./invited-view";
 import { PassedView } from "./passed-view";
+import { usePassedItems } from "./hooks/use-passed-items";
+import { useInvitedItems } from "./hooks/use-invited-items";
 import { ReviewBoardProvider } from "./review-board-context";
 import { ReviewBoardGridSkeleton } from "./review-board-grid-skeleton";
 import { ReviewBoardSkeleton } from "./review-board-skeleton";
 import { ReviewEmpty } from "./review-empty";
 import { ReviewHeader } from "./review-header";
-import { ReviewIncomingToggle } from "./review-incoming-toggle";
+import { ReviewIncomingToggle, type ReviewView } from "./review-incoming-toggle";
 import { ReviewLeftList } from "./review-left-list";
 import { matchesReviewQuery, type QuickFilterId, ReviewPromptBox } from "./review-prompt-box";
 import { ReviewMobileSheet } from "./review-mobile-sheet";
@@ -53,6 +56,8 @@ interface ReviewBoardProps {
 	sendoutTalentIds?: readonly string[];
 	canUseTalentSearch: boolean;
 	viewerIsPlatformAdmin?: boolean;
+	/** False for viewers: they can read the queue, not decide on it. */
+	canDecide?: boolean;
 }
 
 export function ReviewBoard({
@@ -65,6 +70,7 @@ export function ReviewBoard({
 	sendoutTalentIds,
 	canUseTalentSearch,
 	viewerIsPlatformAdmin = false,
+	canDecide = true,
 }: ReviewBoardProps) {
 	const [selectedRoleId, setSelectedRoleId] = useState<string | undefined>(
 		roleParam === ALL_ROLES_PARAM ? undefined : roleParam,
@@ -99,7 +105,11 @@ export function ReviewBoard({
 	const isMobile = useMediaQuery("(max-width: 1023px)");
 	const queryClient = useQueryClient();
 	const [mobileTalent, setMobileTalent] = useState<ReviewItem | null>(null);
-	const [showPassed, setShowPassed] = useState(view === "passed");
+	const [activeView, setActiveView] = useState<ReviewView>(
+		view === "passed" || view === "invited" ? view : "review",
+	);
+	const passedCount = usePassedItems(orgId, selectedRoleId).query.data?.totalCount;
+	const invitedCount = useInvitedItems(orgId, selectedRoleId).data?.totalCount;
 	const listRef = useRef<HTMLDivElement>(null);
 	const [query, setQuery] = useState("");
 	const [quickFilter, setQuickFilter] = useState<QuickFilterId | null>(null);
@@ -161,9 +171,9 @@ export function ReviewBoard({
 		mobilePanelWasOpen.current = false;
 	}, [mobilePanelOpen]);
 
-	const handleViewChange = useCallback((passed: boolean) => {
-		setShowPassed(passed);
-		setReviewUrlParams({ view: passed ? "passed" : undefined });
+	const handleViewChange = useCallback((next: ReviewView) => {
+		setActiveView(next);
+		setReviewUrlParams({ view: next === "review" ? undefined : next });
 	}, []);
 	const { setStreams } = board;
 	const handleStreamsChange = useCallback(
@@ -174,10 +184,15 @@ export function ReviewBoard({
 		[setStreams],
 	);
 
+	// The feed is paged: the list may hold 11 of 20. Count everyone waiting, unless a
+	// candidate-type filter narrows the list, where only the loaded people are known.
+	const streamFiltered = board.items.length < board.streamCounts.all;
+	const waitingTotal = streamFiltered ? board.items.length : Math.max(board.totalCount, board.items.length);
+
 	const anyModalOpen = !!board.rolePickerItem || board.hmWarningOpen || !!board.followThrough;
 	useTalentDecisionKeyboard({
 		selected: board.selected,
-		enabled: !isMobile && !anyModalOpen,
+		enabled: canDecide && !isMobile && !anyModalOpen,
 		panelOpen: !!board.panel,
 		onIntro: board.openIntro,
 		onOpenPass: board.openPass,
@@ -199,23 +214,25 @@ export function ReviewBoard({
 				<div className="flex flex-col gap-6">
 					<div className={REVIEW_CONTROL_BAR_CLASSES}>
 						<ReviewIncomingToggle
-							showPassed={showPassed}
+							view={activeView}
 							onChange={handleViewChange}
-							unreviewedCount={
-								board.isSwitching || incomingEmpty
-									? undefined
-									: `${board.items.length}${board.truncated ? "+" : ""}`
-							}
+							counts={{
+								review: board.isSwitching ? undefined : incomingEmpty ? 0 : waitingTotal,
+								passed: passedCount,
+								invited: invitedCount,
+							}}
 						/>
 						<div className="flex flex-wrap items-center gap-2">
 							<ReviewRoleFilter orgId={orgId} roleId={selectedRoleId} byRole={board.byRole} onChange={handleRoleChange} />
-							{!showPassed && !incomingEmpty && (
+							{activeView === "review" && !incomingEmpty && (
 								<ReviewStreamFilter streams={board.streams} counts={board.streamCounts} onChange={handleStreamsChange} />
 							)}
 						</div>
 					</div>
 
-					{showPassed ? (
+					{activeView === "invited" ? (
+						<InvitedView orgId={orgId} selectedRoleId={selectedRoleId} />
+					) : activeView === "passed" ? (
 						<PassedView orgId={orgId} selectedRoleId={selectedRoleId} viewerIsPlatformAdmin={viewerIsPlatformAdmin} />
 					) : board.isSwitching ? (
 						<ReviewBoardGridSkeleton />
@@ -257,11 +274,10 @@ export function ReviewBoard({
 									/>
 								)}
 								<ReviewHeader
-									remaining={board.items.length}
+									remaining={waitingTotal}
 									reviewed={board.reviewedCount}
-									truncated={board.truncated}
 								/>
-								<div ref={listRef} className="max-h-[calc(100dvh-16rem)] min-h-0 flex-1 overflow-y-auto px-1 pt-1 pb-44 lg:max-h-none">
+								<div ref={listRef} className="px-1 pt-1 pb-44 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
 									{visibleItems.length === 0 && isFiltering ? (
 										<EmptyState heading="No one matches" description="Nobody in this list matches that. Try another filter." />
 									) : board.items.length === 0 ? (
@@ -280,12 +296,14 @@ export function ReviewBoard({
 											onSelect={handleSelect}
 											onOpen={isMobile ? undefined : handleOpen}
 											onPrefetch={handlePrefetch}
-											onIntro={isMobile ? undefined : handleListIntro}
-											onPass={isMobile ? undefined : handleListPass}
+											onIntro={isMobile || !canDecide ? undefined : handleListIntro}
+											onPass={isMobile || !canDecide ? undefined : handleListPass}
 											isPending={board.isPending}
 											chipsFor={board.chipsFor}
 											onCardVisible={board.onCardVisible}
 											onCardSeen={board.onCardSeen}
+											showRole={!selectedRoleId}
+											grouped={!isFiltering}
 										/>
 									)}
 								</div>
@@ -301,6 +319,7 @@ export function ReviewBoard({
 									orgId={orgId}
 									selectedRoleId={selectedRoleId}
 									viewerIsPlatformAdmin={viewerIsPlatformAdmin}
+									canDecide={canDecide}
 								/>
 							</Card>
 						</div>
@@ -311,6 +330,7 @@ export function ReviewBoard({
 					orgId={orgId}
 					talent={mobileTalent}
 					open={!!mobileTalent && isMobile}
+					canDecide={canDecide}
 					isPending={mobileTalent ? board.isPending(mobileTalent) : false}
 					onClose={closeMobile}
 					onInterview={(item) => {

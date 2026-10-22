@@ -81,10 +81,9 @@ function OAuthButton({ icon, label, onClick, disabled, lastUsed }: OAuthButtonPr
 			disabled={disabled}
 			className={cn(
 				"relative flex h-13.25 w-full items-center justify-center gap-2.5 rounded-v2-md",
-				"border border-v2-border-warm bg-white pl-5 pr-8",
+				"border border-v2-border-default bg-v2-bg-card pl-5 pr-8",
 				"font-v2-body text-base text-v2-text-body",
-				"shadow-v2-card",
-				"hover:bg-v2-bg-input-solid",
+				"hover:bg-v2-bg-active",
 			)}
 		>
 			{icon}

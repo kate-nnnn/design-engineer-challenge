@@ -4,7 +4,7 @@ export const ALL_ROLES_PARAM = "all";
 
 export const ORG_REVIEW_FILTER_PARAMS = ["role", "view", "streams"] as const;
 
-export const REVIEW_CONTROL_BAR_CLASSES = "flex flex-wrap items-end justify-between gap-x-6 gap-y-3";
+export const REVIEW_CONTROL_BAR_CLASSES = "flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-b border-v2-border-default pb-4";
 
 // A narrow list of separate cards next to one big resume pane: the resume is what you read,
 // the list is where you are.

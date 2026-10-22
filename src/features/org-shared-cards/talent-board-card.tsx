@@ -101,12 +101,14 @@ function TalentBoardCard({
 			onPointerDown={onPrefetch}
 			className={cn(
 				"flex w-full flex-col rounded-v2-lg border px-5 text-left transition-colors",
-				isNameless ? "gap-3 py-4" : "gap-3.5 py-5",
+				isNameless ? "gap-3.5 py-5" : "gap-4 py-6",
 				isSelected
-					? "border-v2-brand-green bg-v2-bg-card"
+					? "border-v2-brand-teal bg-v2-bg-card"
 					: "border-transparent bg-v2-bg-warm hover:bg-v2-bg-active",
 			)}
 		>
+			{/* Tags sit on their own row, so the avatar lines up with the name and nothing truncates. */}
+			{badge && <div className={cn("-mb-2.5 flex flex-wrap gap-1.5", isNameless ? "pl-11" : "pl-12")}>{badge}</div>}
 			<div className="flex w-full items-center gap-3">
 				<UserAvatar
 					src={hasEnteredViewport ? (item.avatarUrl ?? undefined) : undefined}
@@ -115,19 +117,18 @@ function TalentBoardCard({
 					className={cn("shrink-0", isNameless ? "size-8" : "size-9")}
 				/>
 				<div className="min-w-0 flex-1">
-					<div className="flex items-start justify-between gap-2">
-						<span
-							className={cn(
-								"min-w-0 font-v2-body font-medium text-sm text-v2-text-primary",
-								isNameless ? "line-clamp-2" : "truncate",
-							)}
-						>
-							{title}
-						</span>
-						{badge && <span className="shrink-0">{badge}</span>}
-					</div>
+					<span
+						className={cn(
+							"block min-w-0 font-v2-body font-medium text-sm leading-snug text-v2-text-primary",
+							isNameless ? "line-clamp-2" : "truncate",
+						)}
+					>
+						{title}
+					</span>
 					{item.subtitle && item.subtitle !== title && (
-						<p className="mt-0.5 truncate font-v2-body text-v2-text-tertiary text-xs">{item.subtitle}</p>
+						<p className="mt-0.5 line-clamp-2 font-v2-body text-v2-text-tertiary text-xs leading-relaxed">
+							{item.subtitle}
+						</p>
 					)}
 				</div>
 			</div>

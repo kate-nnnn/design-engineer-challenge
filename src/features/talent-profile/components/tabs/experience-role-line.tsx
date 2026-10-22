@@ -7,6 +7,7 @@ interface ExperienceRoleLineProps {
 	title: string | null;
 	startDate: string | null;
 	endDate: string | null;
+	ended?: boolean;
 	isLatest: boolean;
 	description: string | null;
 	resumeBullets: string[];
@@ -18,12 +19,13 @@ function ExperienceRoleLine({
 	title,
 	startDate,
 	endDate,
+	ended = false,
 	isLatest,
 	description,
 	resumeBullets,
 }: ExperienceRoleLineProps) {
-	const range = dateRangeLabel(startDate, endDate, "month-year");
-	const duration = durationLabel(startDate, endDate);
+	const range = dateRangeLabel(startDate, endDate, "month-year", ended);
+	const duration = ended && !endDate ? null : durationLabel(startDate, endDate);
 	const hasDetails = Boolean(description) || resumeBullets.length > 0;
 
 	return (

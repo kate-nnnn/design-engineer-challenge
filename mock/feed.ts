@@ -7,10 +7,28 @@ import { decisions, reviewItemKey } from "./store";
 const HIDDEN_BEYOND_PAGE_BY_ROLE: Record<string, number> = { [ROLE_IDS.backend]: 9, [ROLE_IDS.ml]: 4 };
 const PAUSED_PENDING: Record<string, number> = { [ROLE_IDS.growth]: 6 };
 
+// Stand-in for the platform's fit score: people who asked to meet you and role picks score
+// higher than the weekly drop, with a stable spread per person. Unscored when there's no role.
+const SCORE_RANGE: Record<ReviewItem["bucket"], [number, number]> = {
+  intro_request: [90, 100],
+  role_specific: [86, 100],
+  weekly_drop: [72, 90],
+  public_drop: [68, 86],
+};
+
+function matchScoreFor(seed: ReviewItemSeed): number | null {
+  if (!seed.roleId) return null;
+  let hash = 0;
+  for (const char of `${seed.talentId}:${seed.roleId}`) hash = (hash * 31 + char.charCodeAt(0)) | 0;
+  const [min, max] = SCORE_RANGE[seed.bucket];
+  return min + (Math.abs(hash) % (max - min + 1));
+}
+
 function toReviewItem(seed: ReviewItemSeed, index: number, now: number): ReviewItem {
   const { receivedMinutesAgo, ...rest } = seed;
   return {
     ...rest,
+    matchScore: matchScoreFor(seed),
     opportunityId: 48000 + index,
     receivedAt: receivedMinutesAgo === null ? null : new Date(now - receivedMinutesAgo * 60_000).toISOString(),
   };
@@ -59,6 +77,12 @@ export function buildReviewFeed({ roleId }: { roleId: string | null }): ReviewLi
     byRole,
     pausedPending: PAUSED_PENDING,
   };
+}
+
+export function buildInvitedFeed({ roleId }: { roleId: string | null }): { items: ReviewItem[]; totalCount: number } {
+  const invited = allReviewItems().filter((item) => decisions.get(reviewItemKey(item))?.action === "interview");
+  const items = roleId ? invited.filter((item) => item.roleId === roleId) : invited;
+  return { items, totalCount: items.length };
 }
 
 export function buildPassedFeed({ roleId }: { roleId: string | null }): { items: ReviewItem[]; totalCount: number } {
