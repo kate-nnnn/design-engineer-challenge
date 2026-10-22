@@ -50,3 +50,67 @@ Started 10:41, 4 hours.
 2. **Home (2:30–3:15):** open roles, tasks to be done, visual statistics, and dates for open roles (like a timer), linking into Review.
 3. **Settings (3:15–3:45):** company profile, team management, billing, and profile settings such as email.
 4. **Final notes (3:45–4:00).**
+
+## What I shipped
+
+Everything is on the `challenge` branch and runs with `pnpm dev`.
+
+### Review
+
+1. **A new, minimal UI kit.** One flat background (white / `#151515`), Clera's teal as the only brand colour, a muted green for AI, Geist as the single font, Lucide icons, one radius scale, and no decorative shadows or warm outlines. Better contrast, readability and hierarchy, in light and dark mode.
+2. **Signal first in the resume pane.** Name and key facts (years of experience, how they want to work, salary, visa), then **why it's a match** in its own box, with the warnings that used to be dropped ("Needs visa sponsorship", "May be too senior") called out. Pass and Request intro sit right under it, the same size, and stay pinned while you scroll.
+3. **A queue you can trust.** Sorted by match score, with a **Best candidates** group (top 3, with their score) and **Other good candidates**. Real counts instead of the loaded page size, a progress line, and how long each person has been waiting.
+4. **To review / Passed / Invited** tabs with counts. "Bring back" sits inside the Passed cards.
+5. **A search box with quick filters** (Wants to meet, Top match, Weekly pick, Has something to check), placed where an AI assistant would live.
+6. **A safe decision loop.** A failed save retries once quietly, then brings back only that person, in their old spot, and names them in the toast with Retry.
+7. **States.** Viewers see "View only" with **Request access** instead of buttons that fail with a 403. The 404 profile (Elif) falls back to the list data. The paused and empty roles explain themselves. On mobile, the page scrolls with the search pinned.
+8. **Messy data.** Every `fitReason` format, missing one-liners ("Current role not mentioned"), duplicate and overflowing companies ("+3 more"), clock skew and missing times, broken links hidden, empty work history, undated and overlapping jobs, and someone listed under two roles.
+
+### Home
+
+"What needs you this week": four big numbers (waiting on you, want to meet, waiting too long, intro calls this week), to-dos ordered by urgency, a week calendar of intro calls, and every role with what's waiting, its pipeline and how many days it's been open. Anyone waiting over a week is flagged in amber. Everything links into Review.
+
+### Settings
+
+One page with sticky tabs: **Company** (round logo with upload, name, tagline, website, location, size), **Team** (members at a glance, invites, and access requests that owners approve or decline), **Your profile** (name, email notifications) and a read-only **Billing** overview. Viewers see it read-only, apart from their own profile.
+
+### Design system
+
+I deliberately moved beyond the `v2-*` design system rather than extending it. I wanted the interface to be clearer for hiring managers and more modern, and to feel less like a generic, AI-generated template. I kept its token names and components, but overrode the values (colour, radius, shadows, borders, font) in one place, so every screen picked up the new look without rewriting components.
+
+Next, I'd go further: a custom brand and UI elements, our own icons and motion that set the product apart from competitors, and a touch of whimsy, because that's at Clera's core.
+
+## What I cut, or didn't get to
+
+1. **Real AI.** The prompt box is a text search with quick filters, and the "AI summary on top of the resume" is the existing "why it's a match" text, cleaned up. Nothing calls a model.
+2. **Managing members.** You can invite and approve access, but not change someone's role or remove them.
+3. **Billing** is read-only, with no plan changes or invoices.
+4. **Phosphor icons** remain in about 40 files outside the three screens (modals, other pages).
+5. **The mobile profile sheet** doesn't have the "why it's a match" box yet.
+6. **Small loose ends.** The sidebar still says "Member" under the owner. A viewer's "Requested" state resets after a reload. Home's "want to meet" and "something to check" counts only include the loaded page.
+7. **No full accessibility or dark-mode audit.** I checked contrast for the main buttons and text, not every screen.
+
+## What I'd do next
+
+1. Connect the prompt box to a model: "only people who've shipped payments infra", "who can start this month".
+2. A real match score and short summary from the backend, replacing the mock score.
+3. Keyboard shortcuts on Passed and Invited, plus undo for "Bring back".
+4. Role changes and removal in Team, and show access requests on Home too.
+5. A proper accessibility pass (focus order, screen reader labels, contrast across dark mode).
+
+## What I'd push back on in the brief
+
+1. **"Use the data the mock API already has" for Home.** A useful "this week" view needs scheduled calls, which the API doesn't have. I added sample data rather than leave the calendar out.
+2. **No match score in the data.** "Show what a hiring manager needs in the first two seconds" really wants a ranking. I added a stand-in score so the queue could show the best people first.
+3. **The paged feed.** `totalCount` and the loaded items disagree, so any count in the UI is a choice to explain.
+4. **The shared repo.** Clera's `main` already contained a previous candidate's finished submission. I started from the original starter commit (`7cc4da3`) on a separate branch so my work stays clearly mine.
+
+## Mock data I added
+
+Beyond the provided API, so it's clear what's real:
+
+1. A `matchScore` on review items, a stable stand-in per person.
+2. `/intro-calls`: sample upcoming calls for the Home calendar.
+3. `/dashboard/review/invited`: people you've requested an intro to.
+4. `/access-requests`: viewers asking for decision rights, plus approve and decline. Sam has a pending request in the demo state.
+5. `/company`, `/members/invites` and `/api/user/settings`: company profile, invites and notification preferences, kept in memory until the server restarts. Billing figures are static.
