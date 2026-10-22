@@ -51,15 +51,18 @@ export function ReviewCard({
 	const waiting = waitingLabel(item.receivedAt);
 	const scoreTag =
 		best && item.matchScore != null ? (
-			<span className="inline-flex items-center rounded-full bg-v2-status-success-bg px-2 py-0.5 font-v2-body text-2xs font-medium text-v2-status-success-text tabular-nums">
-				{item.matchScore}% match
+			<span
+				title="Clera's match score for this role"
+				className="inline-flex h-4.5 items-center rounded-full bg-v2-brand-teal px-1.5 font-v2-body text-[10px] font-medium text-white tabular-nums"
+			>
+				{item.matchScore}%
 			</span>
 		) : null;
 	const badge =
 		item.source !== "passed" ? (
 			<>
 				{scoreTag}
-				<StreamBadge stream={streamOf(item.bucket)} />
+				<StreamBadge stream={streamOf(item.bucket)} className="h-4.5 py-0 text-[10px]" />
 			</>
 		) : undefined;
 	const waitingText = waiting && (
