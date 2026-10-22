@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Button } from "@v2/components/ui/button";
 import { Input } from "@v2/components/ui/input";
 import { Separator } from "@v2/components/ui/separator";
@@ -197,7 +198,7 @@ function Sidebar({
 						: "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
 					variant === "floating" || variant === "inset"
 						? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
-						: "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=left]:border-v2-border-divider group-data-[side=right]:border-l group-data-[side=right]:border-v2-border-divider",
+						: "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=left]:border-v2-border-default group-data-[side=right]:border-l group-data-[side=right]:border-v2-border-default",
 					className,
 				)}
 				{...props}
@@ -216,25 +217,30 @@ function Sidebar({
 Sidebar.displayName = "Sidebar";
 
 function SidebarTrigger({ className, onClick, children, ...props }: React.ComponentProps<typeof Button>) {
-	const { toggleSidebar } = useSidebar();
+	const { toggleSidebar, state } = useSidebar();
 	return (
 		<Button
 			data-sidebar="trigger"
 			data-slot="sidebar-trigger"
 			variant="ghost"
 			size="icon"
-			className={cn("size-7", className)}
+			className={cn(
+				"size-7 border-0 bg-transparent text-v2-text-secondary hover:bg-v2-bg-active hover:text-v2-text-primary",
+				className,
+			)}
 			onClick={(event) => {
 				onClick?.(event);
 				toggleSidebar();
 			}}
 			{...props}
 		>
-			{children ?? (
-				<svg viewBox="0 0 256 256" className="size-4 fill-current" aria-hidden="true" focusable="false">
-					<path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H88V200H40ZM216,200H104V56H216V200Z" />
-				</svg>
-			)}
+			{/* Double chevron points the way the sidebar will move: left to collapse, right to expand. */}
+			{children ??
+				(state === "collapsed" ? (
+					<ChevronsRight className="size-4" aria-hidden />
+				) : (
+					<ChevronsLeft className="size-4" aria-hidden />
+				))}
 			<span className="sr-only">Toggle Sidebar</span>
 		</Button>
 	);
