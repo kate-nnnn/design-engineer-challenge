@@ -15,8 +15,7 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: [
-					"Be Vietnam Pro",
-					"Be Vietnam Pro Fallback",
+					"var(--font-geist)",
 					"ui-sans-serif",
 					"system-ui",
 					"-apple-system",

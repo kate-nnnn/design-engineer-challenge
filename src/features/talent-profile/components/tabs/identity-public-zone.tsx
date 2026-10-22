@@ -1,13 +1,12 @@
 "use client";
 
 import { getFullName } from "@clera/shared-utils";
-import { MapPin } from "@phosphor-icons/react";
+import { MapPin } from "lucide-react";
 import { EditableField } from "@v2/components/data-display";
 import { LinkedInProfileLink, type OrgTalentTracking } from "@v2/components/tracking";
 import { UserAvatar } from "@v2/components/ui/avatar";
 import { Badge } from "@v2/components/ui/badge";
 import { Identicon } from "@v2/components/ui/identicon";
-import { LinkedInIcon } from "@v2/components/ui/linkedin-icon";
 import { Skeleton } from "@v2/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@v2/components/ui/tooltip";
 import { cn } from "@v2/lib/utils";
@@ -86,7 +85,7 @@ function IdentityPublicZone({
 					name={name}
 					fallback={identiconSeed ? <Identicon seed={identiconSeed} /> : undefined}
 					size="lg"
-					className={cn("border border-v2-border-warm", compact ? "size-14" : "size-17")}
+					className={compact ? "size-14" : "size-16"}
 					fallbackClassName={compact ? undefined : "text-base"}
 				/>
 				{data.openForOpportunities && (
@@ -105,17 +104,6 @@ function IdentityPublicZone({
 
 			<div className="flex min-w-0 flex-1 flex-col gap-0.5">
 				<div className="flex flex-wrap items-center gap-1.5">
-					{data.linkedinUrl && (
-						<LinkedInProfileLink
-							url={data.linkedinUrl}
-							element="icon"
-							label="LinkedIn profile"
-							tracking={linkedinTracking}
-							className="shrink-0 text-v2-brand-linkedin transition-opacity hover:opacity-80"
-						>
-							<LinkedInIcon className="size-3.5" />
-						</LinkedInProfileLink>
-					)}
 					{!data.linkedinUrl && !identiconSeed && pending && <Skeleton className="size-3.5 shrink-0" />}
 					{onUpdateName ? (
 						<>
@@ -169,7 +157,7 @@ function IdentityPublicZone({
 
 				{(location || pending) && (
 					<div className="flex items-center gap-1 text-v2-text-muted">
-						<MapPin size={11} weight="fill" className="shrink-0 opacity-60" />
+						<MapPin size={11} className="shrink-0 opacity-60" />
 						<span className="font-v2-body text-xs font-light">
 							{location || <Skeleton className="inline-block h-2.5 w-24 align-middle" />}
 						</span>

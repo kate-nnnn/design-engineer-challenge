@@ -1,8 +1,8 @@
 "use client";
 
-import { Sliders } from "@phosphor-icons/react";
+import { SlidersHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { InfoTooltip, SectionHeading } from "@v2/components/data-display";
+import { InfoTooltip } from "@v2/components/data-display";
 import { Card } from "@v2/components/ui/card";
 import { Skeleton } from "@v2/components/ui/skeleton";
 import { Tag } from "@v2/components/ui/tag";
@@ -12,15 +12,24 @@ import { talentKeys } from "@/lib/query-keys";
 import { unwrap } from "@/services/api";
 import { type PreferencesData, talents } from "@/services/api/talents";
 import { formatCompensation, formatVisaSponsorship } from "./preferences/preference-fields";
+import { ProfileCardHeader } from "./profile-card-header";
 
 interface PreferencesOverviewCardProps {
 	talentId?: string;
 	data?: PreferencesData;
 	visaDetails?: string | null;
 	className?: string;
+	/** Leave out work setup, visa and pay when the identity facts row above already shows them. */
+	omitHeaderFacts?: boolean;
 }
 
-function PreferencesOverviewCard({ talentId, data: dataProp, visaDetails, className }: PreferencesOverviewCardProps) {
+function PreferencesOverviewCard({
+	talentId,
+	data: dataProp,
+	visaDetails,
+	className,
+	omitHeaderFacts = false,
+}: PreferencesOverviewCardProps) {
 	const { data: fetched, isLoading } = useQuery({
 		queryKey: talentKeys.preferencesData(talentId ?? ""),
 		queryFn: () => talents.fetchPreferencesData(talentId!).then(unwrap),
@@ -40,15 +49,21 @@ function PreferencesOverviewCard({ talentId, data: dataProp, visaDetails, classN
 		{ label: "Roles", values: prefs.roles, display: "tags" },
 		{ label: "Job types", values: prefs.jobTypes, display: "tags" },
 		{ label: "Locations", values: prefs.locations.map(shortenLocation), display: "tags" },
-		{ label: "Work environment", values: prefs.workEnvironment, display: "text" },
-		{
-			label: "Visa sponsorship",
-			values: visaText ? [visaText] : [],
-			display: "text",
-			tooltip: visaDetails,
-		},
+		...(omitHeaderFacts
+			? []
+			: [
+					{ label: "Work environment", values: prefs.workEnvironment, display: "text" as const },
+					{
+						label: "Visa sponsorship",
+						values: visaText ? [visaText] : [],
+						display: "text" as const,
+						tooltip: visaDetails,
+					},
+				]),
 		{ label: "Willing to relocate", values: prefs.willingnessToRelocate, display: "text" },
-		...(salaryText ? [{ label: "Compensation", values: [salaryText], display: "text" as const }] : []),
+		...(salaryText && !omitHeaderFacts
+			? [{ label: "Compensation", values: [salaryText], display: "text" as const }]
+			: []),
 		{ label: "Company size", values: prefs.companySize, display: "text" },
 		{ label: "Industry", values: prefs.industries, display: "tags" },
 	];
@@ -58,18 +73,13 @@ function PreferencesOverviewCard({ talentId, data: dataProp, visaDetails, classN
 
 	return (
 		<Card variant="flat" className={cn("overflow-hidden", className)}>
-			<div className="flex items-center gap-2 px-4 py-3 sm:px-5">
-				<Sliders size={16} className="text-v2-text-secondary" />
-				<SectionHeading as="h3" className="text-base">
-					Preferences
-				</SectionHeading>
-			</div>
+			<ProfileCardHeader icon={SlidersHorizontal} title="Preferences" />
 
 			<div className="border-t border-v2-border-warm/50">
 				{rows.map((row) => (
 					<div
 						key={row.label}
-						className="flex items-baseline gap-4 border-b border-v2-border-warm/30 px-4 py-2 last:border-b-0 sm:px-5"
+						className="flex items-baseline gap-4 border-b border-v2-border-warm/30 py-2 last:border-b-0"
 					>
 						<span className="w-28 shrink-0 font-v2-body text-2xs font-medium uppercase tracking-wider text-v2-text-muted">
 							{row.label}
@@ -97,7 +107,7 @@ PreferencesOverviewCard.displayName = "PreferencesOverviewCard";
 function PreferencesOverviewSkeleton({ className }: { className?: string }) {
 	return (
 		<Card variant="flat" className={cn("overflow-hidden", className)}>
-			<div className="flex items-center gap-2 px-4 py-3 sm:px-5">
+			<div className="flex items-center gap-2 py-3">
 				<Skeleton className="size-4 rounded-v2-sm" />
 				<Skeleton className="h-4 w-24" />
 			</div>
@@ -105,7 +115,7 @@ function PreferencesOverviewSkeleton({ className }: { className?: string }) {
 				{Array.from({ length: 4 }, (_, i) => (
 					<div
 						key={i}
-						className="flex items-center gap-4 border-b border-v2-border-warm/30 px-4 py-2 last:border-b-0 sm:px-5"
+						className="flex items-center gap-4 border-b border-v2-border-warm/30 py-2 last:border-b-0"
 					>
 						<Skeleton className="h-3 w-28 shrink-0" />
 						<div className="flex gap-1.5">

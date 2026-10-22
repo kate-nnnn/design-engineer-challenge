@@ -68,6 +68,45 @@ function truncateAtWordBoundary(text: string, maxChars: number): string {
 	return `${cut.trimEnd()}…`;
 }
 
+export interface FitReasonPoint {
+	text: string;
+	caution: boolean;
+}
+
+export interface ParsedFitReason {
+	hook: string;
+	points: FitReasonPoint[];
+}
+
+// Bullets that would change a hiring manager's mind. Matched at the start of the point.
+const CAUTION_PATTERN =
+	/^(?:needs?\b|not\b|no\b|may\b|data may\b|short\b|two concurrent\b|more [\w-]+ than\b|her profile failed|his profile failed|profile is sparse|in final rounds)/i;
+const LIST_ITEM_PATTERN = /^\s*(?:[•\-*]|\(?\d+[.)])\s+/;
+
+function cleanLine(line: string): string {
+	return stripSlackMrkdwn(line).replace(LIST_ITEM_PATTERN, "").replace(/^- /, "").trim();
+}
+
+// Keeps the whole reason, unlike extractFitReasonHook: the lead sentence becomes the hook,
+// every bullet survives, and the ones that read as a risk are marked so they can stand out.
+export function parseFitReason(input: string | null | undefined): ParsedFitReason | null {
+	if (!input) return null;
+	const normalized = input.replace(/\\n/g, "\n").trim();
+	if (!normalized) return null;
+
+	const lines = normalized
+		.split("\n")
+		.map(cleanLine)
+		.filter((line) => line.length > 0);
+	if (lines.length === 0) return null;
+
+	const [first, ...rest] = lines;
+	const hook = stripHookLabel(first).trim();
+	const points = rest.map((text) => ({ text, caution: CAUTION_PATTERN.test(text) }));
+
+	return { hook, points };
+}
+
 export function extractFitReasonHook(input: string | null | undefined): string | null {
 	if (!input) return null;
 	const normalized = input.replace(/\\n/g, "\n");

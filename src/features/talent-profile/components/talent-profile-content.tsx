@@ -121,6 +121,7 @@ interface TalentProfileContentProps {
 	tracking?: OrgTalentTracking;
 	aboveHeader?: ReactNode;
 	belowFacts?: ReactNode;
+	afterSummary?: ReactNode;
 }
 
 function TalentProfileContent({
@@ -131,6 +132,7 @@ function TalentProfileContent({
 	tracking,
 	aboveHeader,
 	belowFacts,
+	afterSummary,
 }: TalentProfileContentProps) {
 	const { header, mergedProfile, preferences } = bundle;
 
@@ -148,14 +150,14 @@ function TalentProfileContent({
 		otherLinks: [],
 	};
 
-	const factsProps = { preferences };
+	const factsProps = { preferences, yearsExperience: header.yearsExperience };
 
 	return (
-		<div className="mx-auto flex w-full max-w-230 flex-col gap-1.75 px-4 py-3 sm:px-6 sm:py-4">
+		<div className="mx-auto flex w-full max-w-230 flex-col gap-4 px-5 pt-8 pb-6 sm:px-8">
 			{tracking && <TrackOrgTalentView tracking={tracking} />}
-			{aboveHeader && <div className="flex items-center px-1">{aboveHeader}</div>}
-			<Card variant="flat" className="overflow-hidden">
-				<div className="px-4 py-2 sm:px-5 sm:py-2.5">
+			{aboveHeader && <div className="flex items-center">{aboveHeader}</div>}
+			<Card variant="flat" className="overflow-hidden border-v2-border-pane">
+				<div className="px-5 pt-5 pb-4">
 					<IdentityPublicZone
 						data={headerData}
 						displayNameOverride={displayNameOverride}
@@ -163,9 +165,10 @@ function TalentProfileContent({
 						identiconSeed={identiconSeed}
 						talentTags={header.talentTags}
 						headerActions={
-							<div className="flex flex-col items-end gap-1.5">
+							<div className="flex flex-wrap items-center justify-end gap-1.5">
 								<HeaderResumeButton talentId={header.id} scope={header.resumeScope} />
 								<HeaderProfileLinks
+									linkedinUrl={header.linkedinUrl}
 									githubUrl={header.githubUrl}
 									xUrl={header.xUrl}
 									portfolioUrl={header.portfolioUrl}
@@ -176,13 +179,18 @@ function TalentProfileContent({
 					/>
 				</div>
 				{hasFacts(factsProps) && (
-					<div className="border-t border-v2-border-warm/50 px-4 py-1.5 sm:px-5">
+					<div className="px-5 pb-5">
 						<IdentityFactsRow {...factsProps} />
 					</div>
 				)}
-				{belowFacts}
 			</Card>
 
+			{belowFacts}
+
+			{afterSummary && <div className="sticky top-0 z-10 bg-v2-bg-card">{afterSummary}</div>}
+
+			{/* Light dividers between sections instead of boxed cards. */}
+			<div className="mt-2 flex flex-col [&>*]:rounded-none [&>*+*]:border-t-v2-border-default [&>*]:py-2">
 			<ExperienceCard
 				talentId={header.id}
 				experiences={mergedProfile.experiences.map(toProfileExperience)}
@@ -193,15 +201,16 @@ function TalentProfileContent({
 
 			<EducationCard education={mergedProfile.education.map(toProfileEducation)} />
 
-			<PreferencesOverviewCard data={preferences} visaDetails={preferences.visaDetails} />
-
 			<ResumeCard talentId={header.id} scope={header.resumeScope} />
 
 			<SkillsCard skills={mergedProfile.skills.map(toProfileSkill)} />
 
 			<LanguagesCard languages={mergedProfile.languages.map(toProfileLanguage)} />
 
+			<PreferencesOverviewCard data={preferences} visaDetails={preferences.visaDetails} omitHeaderFacts />
+
 			<SecondarySectionsCard certifications={mergedProfile.certifications} />
+			</div>
 		</div>
 	);
 }

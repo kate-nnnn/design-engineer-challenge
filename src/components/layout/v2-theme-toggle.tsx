@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "@phosphor-icons/react";
+import { Moon, Sun } from "lucide-react";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@v2/components/ui/sidebar";
 import { useV2Theme } from "@v2/hooks/use-v2-theme";
 

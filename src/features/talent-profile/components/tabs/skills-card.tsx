@@ -1,6 +1,6 @@
 "use client";
 
-import { Code } from "@phosphor-icons/react";
+import { Code } from "lucide-react";
 import { Button } from "@v2/components/ui/button";
 import { Card } from "@v2/components/ui/card";
 import { cn } from "@v2/lib/utils";
@@ -29,7 +29,7 @@ function SkillsCard({ skills, showSuggestButton, onSuggestSkill, className }: Sk
 					</Button>
 				)}
 			</ProfileCardHeader>
-			<div className="flex flex-wrap gap-1.5 border-t border-v2-border-warm/50 px-4 py-3 sm:px-5">
+			<div className="flex flex-wrap gap-1.5 border-t border-v2-border-warm/50 py-3">
 				{skills.map((skill) => (
 					<div
 						key={skill.name}

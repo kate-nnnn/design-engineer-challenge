@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatCircleText } from "@phosphor-icons/react/ssr";
+import { MessageSquareText } from "lucide-react";
 import { SidebarMenuButton, SidebarMenuItem } from "@v2/components/ui/sidebar";
 import { OrgFeedbackDialog, useOrgFeedbackDialog } from "@v2/features/org-feedback";
 
@@ -12,7 +12,7 @@ export function NavFeedback() {
 		<>
 			<SidebarMenuItem>
 				<SidebarMenuButton tooltip="Feedback" isActive={open} onClick={() => setOpen(true)}>
-					<ChatCircleText />
+					<MessageSquareText />
 					<span>Feedback</span>
 				</SidebarMenuButton>
 			</SidebarMenuItem>

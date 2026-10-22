@@ -1,6 +1,6 @@
 "use client";
 
-import { Gear, UserCircle } from "@phosphor-icons/react";
+import { CircleUser, Settings } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -52,7 +52,7 @@ export function UserSidebarProfile({ accountHref, settingsHref }: UserSidebarPro
 						{accountHref && (
 							<DropdownMenuItem asChild>
 								<Link href={accountHref} onClick={closeSheet}>
-									<UserCircle weight="duotone" />
+									<CircleUser />
 									Account
 								</Link>
 							</DropdownMenuItem>
@@ -60,7 +60,7 @@ export function UserSidebarProfile({ accountHref, settingsHref }: UserSidebarPro
 						{settingsHref && (
 							<DropdownMenuItem asChild>
 								<Link href={settingsHref} onClick={closeSheet}>
-									<Gear weight="duotone" />
+									<Settings />
 									Settings
 								</Link>
 							</DropdownMenuItem>

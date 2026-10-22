@@ -25,7 +25,7 @@ const buttonVariants = cva(
 			variant: {
 				primary: `${BUTTON_LAYOUT} gradient-v2-brand text-white shadow-v2-button border border-black/10 hover:shadow-none`,
 				"primary-light": `${BUTTON_LAYOUT} bg-linear-to-b from-v2-bg-page to-v2-bg-modal-header text-v2-text-brand shadow-v2-button border border-v2-brand-teal-dark hover:opacity-90`,
-				ghost: `${BUTTON_LAYOUT} border border-v2-border-warm bg-transparent text-v2-text-body hover:bg-v2-bg-input-solid`,
+				ghost: `${BUTTON_LAYOUT} border border-v2-border-default bg-v2-bg-card text-v2-text-body hover:bg-v2-bg-active`,
 				link: "font-v2-body text-v2-text-tertiary underline-offset-4 hover:underline p-0 h-auto",
 				// Inherits base UX invariants (cursor, focus ring, tap feedback, disabled opacity)
 				// with no visual theme and no layout opinions. Use for buttons that need full

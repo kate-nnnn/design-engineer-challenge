@@ -1,6 +1,6 @@
 "use client";
 
-import { Lightning, Sparkle, Star } from "@phosphor-icons/react";
+import { Sparkles, Star, Zap } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@v2/components/ui/tooltip";
 import { cn } from "@v2/lib/utils";
 import type { ReviewStream } from "./types";
@@ -14,14 +14,14 @@ export const STREAM_CONFIG = {
 	curated: {
 		label: "We think it's a match",
 		tooltip: "Clera surfaced this candidate as a strong fit for the role, but they haven't been asked yet.",
-		icon: Lightning,
+		icon: Zap,
 		iconClassName: "text-v2-brand-green",
 		className: "bg-v2-brand-green/10 text-v2-brand-green",
 	},
 	drop: {
 		label: "Outstanding this week",
 		tooltip: "Part of a handpicked drop of outstanding candidates we sent you this week.",
-		icon: Sparkle,
+		icon: Sparkles,
 		iconClassName: "text-v2-status-info",
 		className: "bg-v2-status-info/10 text-v2-status-info",
 	},
@@ -46,7 +46,7 @@ export function StreamBadge({ stream, className }: StreamBadgeProps) {
 						className,
 					)}
 				>
-					<Icon size={10} weight="fill" aria-hidden="true" />
+					<Icon size={10} aria-hidden="true" />
 					{label}
 				</span>
 			</TooltipTrigger>

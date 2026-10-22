@@ -16,6 +16,8 @@ interface TalentBoardDetailPaneProps {
 	profileMeta?: ReactNode;
 	profileBelowFacts?: ReactNode;
 	footer?: ReactNode;
+	/** Decision controls shown right under the summary, where the eye lands after reading why it's a match. */
+	decision?: ReactNode;
 	emptyHeading?: string;
 	emptyDescription?: string;
 }
@@ -30,6 +32,7 @@ function TalentBoardDetailPane({
 	profileMeta,
 	profileBelowFacts,
 	footer,
+	decision,
 	emptyHeading = "Select a candidate",
 	emptyDescription = "Pick someone on the left to see their full profile here.",
 }: TalentBoardDetailPaneProps) {
@@ -51,11 +54,17 @@ function TalentBoardDetailPane({
 						tracking={tracking}
 						aboveHeader={profileMeta}
 						belowFacts={profileBelowFacts}
+						afterSummary={decision}
 					/>
-				) : isError ? (
-					<EmptyState heading="Could not load profile" description="Something went wrong. Please try again." />
 				) : (
-					fallback
+					<>
+						{isError ? (
+							<EmptyState heading="Could not load profile" description="Something went wrong. Please try again." />
+						) : (
+							fallback
+						)}
+						{decision && <div className="px-4 sm:px-6">{decision}</div>}
+					</>
 				)}
 			</div>
 			{footer && <div className="sticky bottom-0 rounded-b-v2-lg bg-v2-bg-card">{footer}</div>}

@@ -1,6 +1,6 @@
 "use client";
 
-import { File } from "@phosphor-icons/react";
+import { File } from "lucide-react";
 import { Button } from "@v2/components/ui/button";
 import { Card } from "@v2/components/ui/card";
 import { useMultipleResumes } from "@v2/hooks/use-multiple-resumes";
@@ -36,7 +36,7 @@ function ResumeCard({ talentId, scope, allowUpload = false, className }: ResumeC
 	return (
 		<Card variant="flat" className={cn("overflow-hidden", className)}>
 			<ProfileCardHeader icon={File} title="Resume" />
-			<div className="border-t border-v2-border-warm/50 px-4 py-2.5 sm:px-5">
+			<div className="border-t border-v2-border-warm/50 py-2.5">
 				{isEmpty ? (
 					<div className="flex items-center gap-2">
 						<span className="min-w-0 flex-1 font-v2-body text-xs text-v2-text-muted">No resume on file</span>

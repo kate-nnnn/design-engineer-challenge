@@ -1,7 +1,7 @@
 "use client";
 
 import { orgRoutes } from "@clera/route-factory";
-import { Gear, Plugs } from "@phosphor-icons/react/ssr";
+import { Plug, Settings } from "lucide-react";
 import {
 	SidebarGroup,
 	SidebarGroupContent,
@@ -32,7 +32,7 @@ export function NavSettings({ canManageContacts }: { canManageContacts: boolean 
 					<SidebarMenuItem>
 						<SidebarMenuButton asChild isActive={isIntegrationsActive} tooltip="Integrations">
 							<Link href={integrationsUrl} aria-current={isIntegrationsActive ? "page" : undefined}>
-								<Plugs />
+								<Plug />
 								<span>Integrations</span>
 							</Link>
 						</SidebarMenuButton>
@@ -40,7 +40,7 @@ export function NavSettings({ canManageContacts }: { canManageContacts: boolean 
 					<SidebarMenuItem>
 						<SidebarMenuButton asChild isActive={isActive} tooltip="Settings">
 							<Link href={orgRoutes.settings.company(orgId)} aria-current={isActive ? "page" : undefined}>
-								<Gear />
+								<Settings />
 								<span>Settings</span>
 								<ContactsActionBadge
 									count={actionNeededCount}

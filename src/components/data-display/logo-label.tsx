@@ -21,7 +21,7 @@ export function LogoLabel({ logoUrl, label }: LogoLabelProps) {
 					alt=""
 					width={14}
 					height={14}
-					className="size-3.5 shrink-0 rounded-v2-sm object-contain"
+					className="size-3.5 shrink-0 rounded-full object-cover"
 					onError={() => {
 						failedLogoSrcs.add(logoUrl);
 						setErroredSrc(logoUrl);

@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@phosphor-icons/react";
+import { User } from "lucide-react";
 import { cn } from "@v2/lib/utils";
 import { getInitials, optimizedImageUrl } from "@v2/utils/format";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -73,16 +73,28 @@ interface UserAvatarProps extends VariantProps<typeof avatarVariants> {
 	alt?: string;
 }
 
+const AVATAR_TONES = 6;
+
+function toneFor(name: string): number {
+	let hash = 0;
+	for (const char of name) hash = (hash * 31 + char.charCodeAt(0)) | 0;
+	return (Math.abs(hash) % AVATAR_TONES) + 1;
+}
+
+// People are shown as initials on a muted colour: photos vary wildly in quality and
+// pull focus from the reason someone was picked. `src` stays in the API for callers.
 const UserAvatar = React.forwardRef<HTMLSpanElement, UserAvatarProps>(
-	({ src, name, size, className, fallbackClassName, fallback, alt = "" }, ref) => {
+	({ name, size, className, fallbackClassName, fallback, alt = "" }, ref) => {
 		const initials = name ? getInitials(name) : "";
-		const fallbackContent =
-			fallback ?? (initials || <User weight="fill" className="size-1/2 opacity-60" aria-hidden="true" />);
+		const fallbackContent = initials || fallback || <User className="size-1/2 opacity-60" aria-hidden="true" />;
 		const decorative = alt === "";
 		return (
 			<Avatar ref={ref} size={size} className={className}>
-				{src ? <AvatarImage src={src} alt={alt} /> : null}
-				<AvatarFallback className={fallbackClassName} aria-hidden={decorative ? "true" : undefined}>
+				<AvatarFallback
+					className={cn("border-0 font-medium text-white", fallbackClassName)}
+					style={name ? { backgroundColor: `var(--v2-identicon-${toneFor(name)})` } : undefined}
+					aria-hidden={decorative ? "true" : undefined}
+				>
 					{fallbackContent}
 				</AvatarFallback>
 			</Avatar>

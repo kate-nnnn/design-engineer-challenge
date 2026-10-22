@@ -434,6 +434,19 @@
 	/* --- Font Families --- */
 	--font-v2-heading: var(--v2-font-heading);
 	--font-v2-body: var(--v2-font-body);
+	--color-v2-ai-neon: var(--v2-ai-neon);
+	--color-v2-border-pane: var(--v2-border-pane);
+	--shadow-v2-ai-glow: var(--v2-ai-glow);
+	--shadow-v2-intro-glow: var(--v2-intro-glow);
+	--shadow-v2-pass-glow: var(--v2-pass-glow);
+	--color-v2-pass-bg: var(--v2-pass-bg);
+	--color-v2-pass-bg-hover: var(--v2-pass-bg-hover);
+	--color-v2-pass-border: var(--v2-pass-border);
+	--color-v2-pass-text: var(--v2-pass-text);
+	--color-v2-intro-bg: var(--v2-intro-bg);
+	--color-v2-intro-bg-hover: var(--v2-intro-bg-hover);
+	--color-v2-intro-border: var(--v2-intro-border);
+	--color-v2-intro-text: var(--v2-intro-text);
 
 	/* --- Type Scale --- */
 	--text-3xs: 0.5rem;
@@ -461,7 +474,7 @@
 }
 
 @utility gradient-v2-brand {
-	background-image: linear-gradient(to bottom, var(--v2-brand-teal), var(--v2-brand-teal-dark));
+	background-color: var(--v2-brand-teal);
 }
 
 @utility tint-surface {
@@ -1182,4 +1195,146 @@
 	width: auto;
 	margin: 2rem auto;
 	border-radius: var(--v2-radius-md);
+}
+
+/* ============================================
+   MINIMAL THEME
+   One flat background, one font (Geist), green as the only brand colour and
+   neon green reserved for AI. No warm outlines, no dividers, no decorative
+   shadows. Overrides the tokens above so every screen picks it up.
+   ============================================ */
+
+:root {
+	--v2-brand-teal: #039365;
+	--v2-brand-teal-dark: #027a54;
+	--v2-brand-teal-bright: #039365;
+	--v2-brand-green: #039365;
+	--v2-brand-teal-badge: #039365;
+	--v2-brand-cream: #ffffff;
+	--v2-ai-neon: #4cc38a;
+	--v2-ai-glow: 0 0 0 1px rgba(76, 195, 138, 0.45), 0 6px 24px rgba(76, 195, 138, 0.22);
+	/* Decision buttons: equal-weight light tints with dark text, red for pass, brand green for intro. */
+	--v2-pass-bg: #fdf0f0;
+	--v2-pass-bg-hover: #fbe3e3;
+	--v2-pass-border: #f3c6c6;
+	--v2-pass-text: #b42318;
+	--v2-intro-bg: #eaf7f0;
+	--v2-intro-bg-hover: #dcf1e6;
+	--v2-intro-border: #b4e0ca;
+	--v2-intro-text: #027a54;
+	--v2-intro-glow: 0 0 0 1px rgba(3, 147, 101, 0.18), 0 10px 32px rgba(3, 147, 101, 0.16);
+	--v2-pass-glow: 0 0 0 1px rgba(220, 38, 38, 0.16), 0 10px 32px rgba(220, 38, 38, 0.14);
+
+	--v2-bg-page: #ffffff;
+	--v2-bg-card: #ffffff;
+	--v2-bg-warm: #f6f6f6;
+	--v2-bg-blush: #f6f6f6;
+	--v2-bg-input: #f6f6f6;
+	--v2-bg-input-solid: #f6f6f6;
+	--v2-bg-badge-teal: #e8f6ee;
+	--v2-bg-active: #f1f1f1;
+	--v2-bg-chat: #f6f6f6;
+	--v2-bg-modal-header: #f6f6f6;
+
+	--v2-text-primary: #111111;
+	--v2-text-body: #111111;
+	--v2-text-secondary: #555555;
+	--v2-text-table-secondary: #555555;
+	--v2-text-tertiary: #6b6b6b;
+	--v2-text-muted: #6b6b6b;
+	--v2-text-placeholder: #8a8a8a;
+	--v2-text-brand: #027a54;
+	--v2-text-brand-green: #027a54;
+
+	--v2-border-warm: transparent;
+	--v2-border-warm-soft: transparent;
+	--v2-border-divider: transparent;
+	--v2-border-default: #e6e6e6;
+	--v2-border-medium: #d6d6d6;
+	--v2-border-active: #027a54;
+	--v2-border-pane: #ececec;
+
+	--v2-status-active: #027a54;
+	--v2-status-active-bg: #e8f6ee;
+	--v2-status-success: #027a54;
+	--v2-status-success-bg: #e8f6ee;
+	--v2-status-success-text: #027a54;
+
+	--v2-radius-sm: 6px;
+	--v2-radius-md: 8px;
+	--v2-radius-lg: 12px;
+	--v2-radius-xl: 12px;
+
+	--v2-shadow-card: none;
+	--v2-shadow-card-dark: none;
+	--v2-shadow-button: none;
+	--v2-shadow-gloss: none;
+	--v2-shadow-content: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.06);
+
+	--v2-font-heading: var(--font-geist), system-ui, sans-serif;
+	--v2-font-body: var(--font-geist), system-ui, sans-serif;
+}
+
+:root[data-v2-theme="dark"],
+:root.dark {
+	--v2-brand-teal: #039365;
+	--v2-brand-teal-dark: #027a54;
+	--v2-brand-teal-bright: #039365;
+	--v2-brand-green: #22c55e;
+	--v2-ai-glow: 0 0 0 1px rgba(76, 195, 138, 0.4), 0 6px 28px rgba(76, 195, 138, 0.16);
+
+	--v2-identicon-1: #70849b;
+	--v2-identicon-2: #537b78;
+	--v2-identicon-3: #62876f;
+	--v2-identicon-4: #968364;
+	--v2-identicon-5: #9d787b;
+	--v2-identicon-6: #867c9f;
+
+	--v2-pass-bg: rgba(239, 68, 68, 0.1);
+	--v2-pass-bg-hover: rgba(239, 68, 68, 0.16);
+	--v2-pass-border: rgba(239, 68, 68, 0.3);
+	--v2-pass-text: #f87171;
+	--v2-intro-bg: rgba(3, 147, 101, 0.14);
+	--v2-intro-bg-hover: rgba(3, 147, 101, 0.22);
+	--v2-intro-border: rgba(3, 147, 101, 0.4);
+	--v2-intro-text: #4ade80;
+
+	--v2-bg-page: #151515;
+	--v2-bg-card: #151515;
+	--v2-bg-warm: #1e1e1e;
+	--v2-bg-blush: #1e1e1e;
+	--v2-bg-input: #1e1e1e;
+	--v2-bg-input-solid: #1e1e1e;
+	--v2-bg-badge-teal: rgba(19, 163, 95, 0.16);
+	--v2-bg-active: #222222;
+	--v2-bg-chat: #1e1e1e;
+	--v2-bg-modal-header: #1e1e1e;
+	--v2-bg-tag-dark: #222222;
+
+	--v2-text-primary: #f2f2f2;
+	--v2-text-body: #f2f2f2;
+	--v2-text-secondary: #a8a8a8;
+	--v2-text-table-secondary: #a8a8a8;
+	--v2-text-tertiary: #949494;
+	--v2-text-muted: #8c8c8c;
+	--v2-text-placeholder: #737373;
+	--v2-text-inverse: #ffffff;
+	--v2-text-brand: #4ade80;
+	--v2-text-brand-green: #4ade80;
+
+	--v2-border-warm: transparent;
+	--v2-border-warm-soft: transparent;
+	--v2-border-divider: transparent;
+	--v2-border-default: #2a2a2a;
+	--v2-border-medium: #333333;
+	--v2-border-active: #13a35f;
+	--v2-border-pane: #262626;
+
+	--v2-status-active: #4ade80;
+	--v2-status-success: #4ade80;
+	--v2-status-success-text: #4ade80;
+
+	--v2-shadow-card: none;
+	--v2-shadow-gloss: none;
+	--v2-shadow-content: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35);
 }

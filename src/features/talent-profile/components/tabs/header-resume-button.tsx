@@ -1,6 +1,6 @@
 "use client";
 
-import { FilePdf } from "@phosphor-icons/react";
+import { FileText } from "lucide-react";
 import { Button } from "@v2/components/ui/button";
 import { useState } from "react";
 import { usePrimaryResume } from "../../hooks/use-primary-resume";
@@ -21,12 +21,12 @@ function HeaderResumeButton({ talentId, scope }: HeaderResumeButtonProps) {
 		<>
 			<Button
 				variant="ghost"
-				size="compact"
-				className="gap-1.5"
+				size="sm"
+				className="gap-1.5 px-3"
 				onClick={() => setPreviewOpen(true)}
 				title="View resume"
 			>
-				<FilePdf size={14} weight="fill" className="text-v2-status-error" />
+				<FileText size={14} />
 				Resume
 			</Button>
 			<ResumePreviewDialog

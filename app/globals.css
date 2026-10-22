@@ -20,7 +20,7 @@
 	}
 
 	body {
-		background-color: var(--legacy-color-bg-primary);
+		background-color: var(--v2-bg-page);
 		color: var(--legacy-color-text-primary);
 	}
 }

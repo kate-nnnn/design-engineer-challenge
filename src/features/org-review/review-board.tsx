@@ -9,7 +9,7 @@ import { RolePickerModal } from "@v2/features/org-shared-modals";
 import { prefetchOrgTalentProfile } from "@v2/features/org-talent-profile";
 import { useMediaQuery } from "@v2/hooks/use-media-query";
 import { usePersistFilterParams } from "@v2/hooks/use-persisted-search";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SendoutListEntry } from "@/services/api/organizations";
 import {
 	ALL_ROLES_PARAM,
@@ -33,6 +33,7 @@ import { ReviewEmpty } from "./review-empty";
 import { ReviewHeader } from "./review-header";
 import { ReviewIncomingToggle } from "./review-incoming-toggle";
 import { ReviewLeftList } from "./review-left-list";
+import { matchesReviewQuery, type QuickFilterId, ReviewPromptBox } from "./review-prompt-box";
 import { ReviewMobileSheet } from "./review-mobile-sheet";
 import { ReviewRightPane } from "./review-right-pane";
 import { ReviewRoleFilter } from "./review-role-filter";
@@ -100,6 +101,13 @@ export function ReviewBoard({
 	const [mobileTalent, setMobileTalent] = useState<ReviewItem | null>(null);
 	const [showPassed, setShowPassed] = useState(view === "passed");
 	const listRef = useRef<HTMLDivElement>(null);
+	const [query, setQuery] = useState("");
+	const [quickFilter, setQuickFilter] = useState<QuickFilterId | null>(null);
+	const isFiltering = !!query || !!quickFilter;
+	const visibleItems = useMemo(
+		() => (isFiltering ? board.items.filter((item) => matchesReviewQuery(item, query, quickFilter)) : board.items),
+		[board.items, query, quickFilter, isFiltering],
+	);
 	usePrefetchNextProfile(orgId, board.items, board.selectedKey);
 
 	const { selectedKey } = board;
@@ -188,13 +196,23 @@ export function ReviewBoard({
 	return (
 		<ReviewBoardProvider value={board}>
 			<TooltipProvider delayDuration={150}>
-				<div className="flex flex-col gap-3">
+				<div className="flex flex-col gap-6">
 					<div className={REVIEW_CONTROL_BAR_CLASSES}>
-						<ReviewIncomingToggle showPassed={showPassed} onChange={handleViewChange} />
-						<ReviewRoleFilter orgId={orgId} roleId={selectedRoleId} byRole={board.byRole} onChange={handleRoleChange} />
-						{!showPassed && !incomingEmpty && (
-							<ReviewStreamFilter streams={board.streams} counts={board.streamCounts} onChange={handleStreamsChange} />
-						)}
+						<ReviewIncomingToggle
+							showPassed={showPassed}
+							onChange={handleViewChange}
+							unreviewedCount={
+								board.isSwitching || incomingEmpty
+									? undefined
+									: `${board.items.length}${board.truncated ? "+" : ""}`
+							}
+						/>
+						<div className="flex flex-wrap items-center gap-2">
+							<ReviewRoleFilter orgId={orgId} roleId={selectedRoleId} byRole={board.byRole} onChange={handleRoleChange} />
+							{!showPassed && !incomingEmpty && (
+								<ReviewStreamFilter streams={board.streams} counts={board.streamCounts} onChange={handleStreamsChange} />
+							)}
+						</div>
 					</div>
 
 					{showPassed ? (
@@ -243,8 +261,10 @@ export function ReviewBoard({
 									reviewed={board.reviewedCount}
 									truncated={board.truncated}
 								/>
-								<div ref={listRef} className="max-h-[calc(100dvh-16rem)] min-h-0 flex-1 overflow-y-auto lg:max-h-none">
-									{board.items.length === 0 ? (
+								<div ref={listRef} className="max-h-[calc(100dvh-16rem)] min-h-0 flex-1 overflow-y-auto px-1 pt-1 pb-44 lg:max-h-none">
+									{visibleItems.length === 0 && isFiltering ? (
+										<EmptyState heading="No one matches" description="Nobody in this list matches that. Try another filter." />
+									) : board.items.length === 0 ? (
 										<EmptyState
 											heading={incomingEmpty ? "All reviewed" : "Nothing here"}
 											description={
@@ -255,7 +275,7 @@ export function ReviewBoard({
 										/>
 									) : (
 										<ReviewLeftList
-											items={board.items}
+											items={visibleItems}
 											selectedKey={board.selectedKey}
 											onSelect={handleSelect}
 											onOpen={isMobile ? undefined : handleOpen}
@@ -269,6 +289,12 @@ export function ReviewBoard({
 										/>
 									)}
 								</div>
+								<ReviewPromptBox
+									value={query}
+									onChange={setQuery}
+									activeFilter={quickFilter}
+									onFilterChange={setQuickFilter}
+								/>
 							</Card>
 							<Card className={REVIEW_RIGHT_CARD_CLASSES}>
 								<ReviewRightPane

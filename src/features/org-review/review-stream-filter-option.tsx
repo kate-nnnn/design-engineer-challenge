@@ -14,7 +14,7 @@ export function ReviewStreamFilterOption({ stream, count, checked }: ReviewStrea
 	const { label, icon: Icon, iconClassName } = STREAM_CONFIG[stream];
 	return (
 		<>
-			<Icon size={13} weight="fill" className={cn("shrink-0", iconClassName)} aria-hidden="true" />
+			<Icon size={13} className={cn("shrink-0", iconClassName)} aria-hidden="true" />
 			<span className={cn("flex-1 truncate text-v2-text-primary", checked && "font-medium")}>{label}</span>
 			<span className="shrink-0 text-2xs tabular-nums text-v2-text-tertiary">{count}</span>
 		</>

@@ -1,6 +1,6 @@
 import { orgRoutes } from "@clera/route-factory";
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import type React from "react";
 
@@ -14,6 +14,13 @@ export const metadata: Metadata = {
   icons: { icon: [{ url: "/icon.svg", type: "image/svg+xml" }] },
 };
 
+// One family for the whole app: headings and body both read from --font-geist.
+const geist = Geist({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-geist",
+  display: "swap",
+});
+
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -24,7 +31,7 @@ const geistMono = Geist_Mono({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${geistMono.variable} font-sans`}>
+    <html lang="en" suppressHydrationWarning className={`${geist.variable} ${geistMono.variable} font-sans`}>
       <head>
         <script
           // biome-ignore lint/security/noDangerouslySetInnerHtml: theme must apply before first paint to avoid a light flash

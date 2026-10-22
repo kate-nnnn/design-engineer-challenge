@@ -39,6 +39,8 @@ interface TalentBoardCardProps {
 	onVisible?: () => void;
 	onSeen?: () => void;
 	cardKey?: string;
+	/** Keeps the chip row clear of action buttons overlaid in the bottom-right corner. */
+	reserveActionSpace?: boolean;
 }
 
 function TalentBoardCard({
@@ -51,6 +53,7 @@ function TalentBoardCard({
 	footer,
 	onVisible,
 	onSeen,
+	reserveActionSpace = false,
 	cardKey,
 }: TalentBoardCardProps) {
 	const isNameless = !item.name;
@@ -97,9 +100,11 @@ function TalentBoardCard({
 			onPointerLeave={handleMouseLeave}
 			onPointerDown={onPrefetch}
 			className={cn(
-				"flex w-full flex-col rounded-none border-l-2 px-4 text-left transition-colors hover:bg-v2-bg-warm",
-				isNameless ? "gap-1.5 py-2.5" : "gap-2 py-3",
-				isSelected ? "border-l-v2-brand-green bg-v2-bg-warm" : "border-l-transparent",
+				"flex w-full flex-col rounded-v2-lg border px-5 text-left transition-colors",
+				isNameless ? "gap-3 py-4" : "gap-3.5 py-5",
+				isSelected
+					? "border-v2-brand-green bg-v2-bg-card"
+					: "border-transparent bg-v2-bg-warm hover:bg-v2-bg-active",
 			)}
 		>
 			<div className="flex w-full items-center gap-3">
@@ -110,16 +115,16 @@ function TalentBoardCard({
 					className={cn("shrink-0", isNameless ? "size-8" : "size-9")}
 				/>
 				<div className="min-w-0 flex-1">
-					<div className="flex items-start gap-1.5">
+					<div className="flex items-start justify-between gap-2">
 						<span
 							className={cn(
-								"font-v2-body font-medium text-sm text-v2-text-primary",
+								"min-w-0 font-v2-body font-medium text-sm text-v2-text-primary",
 								isNameless ? "line-clamp-2" : "truncate",
 							)}
 						>
 							{title}
 						</span>
-						{badge}
+						{badge && <span className="shrink-0">{badge}</span>}
 					</div>
 					{item.subtitle && item.subtitle !== title && (
 						<p className="mt-0.5 truncate font-v2-body text-v2-text-tertiary text-xs">{item.subtitle}</p>
@@ -131,7 +136,8 @@ function TalentBoardCard({
 				companies={item.companies}
 				school={item.school}
 				isLoading={item.chipsLoading}
-				className={cn("w-full", isNameless ? "pl-11" : "pl-12")}
+				maxVisible={2}
+				className={cn("w-full", isNameless ? "pl-11" : "pl-12", reserveActionSpace && "pr-18")}
 			/>
 			{footer && <div className={cn("w-full", isNameless ? "pl-11" : "pl-12")}>{footer}</div>}
 		</Button>

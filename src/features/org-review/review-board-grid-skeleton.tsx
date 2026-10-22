@@ -15,7 +15,7 @@ export function ReviewBoardGridSkeleton() {
 					</div>
 					<Skeleton className="h-4 w-24 shrink-0 rounded-full" />
 				</div>
-				<div className="divide-y divide-v2-border-divider">
+				<div className="flex flex-col gap-2">
 					{Array.from({ length: 7 }).map((_, i) => (
 						<ReviewRowSkeleton key={`row-${i}`} delay={i * 70} />
 					))}

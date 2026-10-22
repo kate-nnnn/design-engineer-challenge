@@ -1,6 +1,6 @@
 "use client";
 
-import { GlobeHemisphereWest } from "@phosphor-icons/react";
+import { Languages } from "lucide-react";
 import { Card } from "@v2/components/ui/card";
 import { cn } from "@v2/lib/utils";
 import { humanizeKey } from "@v2/utils/format";
@@ -20,8 +20,8 @@ function LanguagesCard({ languages, className }: LanguagesCardProps) {
 
 	return (
 		<Card variant="flat" className={cn("overflow-hidden", className)}>
-			<ProfileCardHeader icon={GlobeHemisphereWest} title="Languages" />
-			<div className="flex flex-wrap gap-1.5 border-t border-v2-border-warm/50 px-4 py-3 sm:px-5">
+			<ProfileCardHeader icon={Languages} title="Languages" />
+			<div className="flex flex-wrap gap-1.5 border-t border-v2-border-warm/50 py-3">
 				{languages.map((lang) => (
 					<div
 						key={lang.name}

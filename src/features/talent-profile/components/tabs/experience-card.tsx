@@ -1,7 +1,7 @@
 "use client";
 
 import { groupRolesByEmployer } from "@clera/shared-utils";
-import { ArrowClockwise, Briefcase } from "@phosphor-icons/react";
+import { Briefcase, RotateCw } from "lucide-react";
 import { Button } from "@v2/components/ui/button";
 import { Card } from "@v2/components/ui/card";
 import { Skeleton } from "@v2/components/ui/skeleton";
@@ -69,7 +69,7 @@ function ExperienceCard({
 							className="size-auto border-0 bg-transparent p-0 shadow-none text-v2-text-muted hover:bg-transparent hover:text-v2-text-secondary"
 							aria-label="Recalculate years of experience"
 						>
-							<ArrowClockwise size={14} className={cn(recalculateYears.isPending && "animate-spin")} />
+							<RotateCw size={14} className={cn(recalculateYears.isPending && "animate-spin")} />
 						</Button>
 					)}
 				</div>
@@ -84,7 +84,7 @@ function ExperienceCard({
 					<ExperienceSkeleton />
 				</div>
 			) : tenures.length === 0 ? (
-				<div className="px-4 pb-3 sm:px-5">
+				<div className="pb-3">
 					<p className="font-v2-body text-xs text-v2-text-muted">No experience data available.</p>
 				</div>
 			) : (
@@ -114,7 +114,7 @@ ExperienceCard.displayName = "ExperienceCard";
 
 function ExperienceSkeleton() {
 	return (
-		<div className="flex gap-3 px-4 py-2.5 sm:px-5">
+		<div className="flex gap-3 py-2.5">
 			<Skeleton className="size-11 shrink-0 rounded-v2-md" />
 			<div className="flex flex-1 flex-col gap-1.5">
 				<Skeleton className="h-3.5 w-48" />

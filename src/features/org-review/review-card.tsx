@@ -53,6 +53,7 @@ export function ReviewCard({
 			badge={item.source !== "passed" ? <StreamBadge stream={streamOf(item.bucket)} /> : undefined}
 			onVisible={() => onVisible(item.talentId)}
 			onSeen={onSeen && (() => onSeen(item.talentId))}
+			reserveActionSpace={hasActions}
 		/>
 	);
 

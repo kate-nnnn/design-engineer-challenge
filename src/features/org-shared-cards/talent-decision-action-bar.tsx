@@ -1,8 +1,9 @@
 "use client";
 
-import { PaperPlaneTilt, X } from "@phosphor-icons/react";
+import { Send, X } from "lucide-react";
 import { Button } from "@v2/components/ui/button";
 import { useMediaQuery } from "@v2/hooks/use-media-query";
+import { cn } from "@v2/lib/utils";
 import type { ReactNode } from "react";
 import { TalentDecisionTooltip } from "./talent-decision-tooltip";
 
@@ -13,9 +14,15 @@ interface TalentDecisionActionBarProps {
 	onPass: () => void;
 	showShortcuts?: boolean;
 	leadingAction?: ReactNode;
+	className?: string;
 }
 
-const KBD = "ml-1 rounded bg-black/15 px-1 text-2xs leading-4";
+const KBD = "ml-1 rounded-v2-sm bg-current/10 px-1.5 py-0.5 text-2xs leading-4";
+
+const PASS_CLASSES =
+	"flex-1 gap-1.5 border-v2-pass-border bg-v2-pass-bg font-medium text-v2-pass-text hover:bg-v2-pass-bg-hover";
+const INTRO_CLASSES =
+	"flex-1 gap-1.5 border-v2-intro-border bg-v2-intro-bg font-medium text-v2-intro-text hover:bg-v2-intro-bg-hover";
 
 export function TalentDecisionActionBar({
 	alreadyInterested,
@@ -24,15 +31,16 @@ export function TalentDecisionActionBar({
 	onPass,
 	showShortcuts = true,
 	leadingAction,
+	className,
 }: TalentDecisionActionBarProps) {
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
 	const showHints = showShortcuts && isDesktop;
 	return (
-		<div className="flex items-center gap-2 border-t border-v2-border-divider px-4 py-3">
+		<div className={cn("flex items-center gap-2 border-t border-v2-border-divider px-4 py-3", className)}>
 			{leadingAction}
 			<TalentDecisionTooltip label="Not a fit for this role. Moves to Passed, undo anytime.">
-				<Button variant="ghost" className="flex-2 gap-1.5" disabled={isPending} onClick={onPass}>
-					<X size={16} weight="bold" />
+				<Button variant="ghost" className={PASS_CLASSES} disabled={isPending} onClick={onPass}>
+					<X size={16} />
 					Pass
 					{showHints && <span className={KBD}>⌫</span>}
 				</Button>
@@ -44,8 +52,8 @@ export function TalentDecisionActionBar({
 						: "You want to meet them. We reach out and set up the intro."
 				}
 			>
-				<Button variant="primary" className="flex-3 gap-1.5" disabled={isPending} onClick={onInterview}>
-					<PaperPlaneTilt size={16} weight="fill" />
+				<Button variant="ghost" className={INTRO_CLASSES} disabled={isPending} onClick={onInterview}>
+					<Send size={16} />
 					{alreadyInterested ? "Make an intro" : "Request intro"}
 					{showHints && <span className={KBD}>↵</span>}
 				</Button>

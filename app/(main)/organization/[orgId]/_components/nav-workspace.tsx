@@ -1,7 +1,7 @@
 "use client";
 
 import { orgRoutes } from "@clera/route-factory";
-import { Briefcase, Cards, GlobeHemisphereWest, House, Kanban, MagnifyingGlass, Plus } from "@phosphor-icons/react/ssr";
+import { Briefcase, Globe, House, Kanban, Layers, Plus, Search } from "lucide-react";
 import {
 	SidebarGroup,
 	SidebarGroupContent,
@@ -28,7 +28,7 @@ const buildWorkspaceItems = (
 		name: "Review",
 		url: orgRoutes.review(orgId),
 		href: reviewSearch ? `${orgRoutes.review(orgId)}?${reviewSearch}` : orgRoutes.review(orgId),
-		icon: Cards,
+		icon: Layers,
 	},
 	{ name: "Pipeline", url: orgRoutes.pipeline(orgId), href: orgRoutes.pipeline(orgId), icon: Kanban },
 	{ name: "Roles", url: orgRoutes.roles.list(orgId), href: orgRoutes.roles.list(orgId), icon: Briefcase },
@@ -40,13 +40,13 @@ const buildWorkspaceItems = (
 					href: talentSearchSearch
 						? `${orgRoutes.talentSearch(orgId)}?${talentSearchSearch}`
 						: orgRoutes.talentSearch(orgId),
-					icon: MagnifyingGlass,
+					icon: Search,
 				},
 				{
 					name: "External Search",
 					url: orgRoutes.externalSearch(orgId),
 					href: orgRoutes.externalSearch(orgId),
-					icon: GlobeHemisphereWest,
+					icon: Globe,
 				},
 			]
 		: []),

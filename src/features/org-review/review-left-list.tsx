@@ -36,7 +36,7 @@ export function ReviewLeftList({
 	const exit = prefersReducedMotion ? { opacity: 0 } : { opacity: 0, height: 0 };
 
 	return (
-		<div className="divide-y divide-v2-border-divider">
+		<div className="flex flex-col gap-2">
 			<AnimatePresence initial={false}>
 				{items.map((item) => (
 					<motion.div key={reviewItemKey(item)} exit={exit} transition={{ duration: 0.15 }} className="overflow-hidden">

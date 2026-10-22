@@ -34,11 +34,12 @@ export function ReviewRightPane({ orgId, selectedRoleId, viewerIsPlatformAdmin =
 			profileMeta={item ? <ReviewHeaderMeta item={item} orgId={orgId} showRole={!selectedRoleId} /> : null}
 			profileBelowFacts={item ? <ReviewFitReason reason={item.fitReason} /> : null}
 			fallback={item ? <ReviewProfileShell item={item} /> : null}
-			footer={
+			decision={
 				<>
 					<ReviewDecisionFooter />
 					{item && !board.panel && (
 						<TalentDecisionActionBar
+							className="border-t-0 px-0 py-2"
 							alreadyInterested={streamOf(item.bucket) === "interest"}
 							isPending={board.isPending(item)}
 							onInterview={() => board.openIntro(item)}

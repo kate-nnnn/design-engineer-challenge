@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "@phosphor-icons/react/ssr";
+import { Check } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,

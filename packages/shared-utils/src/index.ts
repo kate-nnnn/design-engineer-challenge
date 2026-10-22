@@ -10,7 +10,12 @@ export { normalizeHeadingText } from "./markdown-heading.ts";
 export { getFullName, getInitials } from "./name-utils.ts";
 export { cleanLinkedinCompanyName } from "./normalize.ts";
 export { cleanSentinelField } from "./sentinel.ts";
-export { extractFitReasonHook } from "./submission-reason-format.ts";
+export {
+	extractFitReasonHook,
+	type FitReasonPoint,
+	type ParsedFitReason,
+	parseFitReason,
+} from "./submission-reason-format.ts";
 export type { EmployerGroup } from "./talent-merge/index.ts";
 export { groupRolesByEmployer } from "./talent-merge/index.ts";
 export { cleanMetaDescription } from "./truncate.ts";

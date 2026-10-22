@@ -1,6 +1,6 @@
 "use client";
 
-import { List } from "@phosphor-icons/react/ssr";
+import { Menu } from "lucide-react";
 import { SidebarTrigger } from "@v2/components/ui/sidebar";
 import { useOrganizations } from "@v2/hooks/use-organizations";
 import { OrgLogo } from "./org-logo";
@@ -10,7 +10,7 @@ export function MobileOrgHeader() {
 	return (
 		<div className="flex h-12 items-center gap-1 border-b border-v2-border-default px-2 md:hidden">
 			<SidebarTrigger aria-label="Open menu" className="size-9 border-0">
-				<List className="size-5" />
+				<Menu className="size-5" />
 			</SidebarTrigger>
 			{currentOrg?.name && (
 				<div className="flex min-w-0 items-center gap-2 px-1">

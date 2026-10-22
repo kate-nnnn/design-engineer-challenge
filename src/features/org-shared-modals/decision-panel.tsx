@@ -1,6 +1,6 @@
 "use client";
 
-import { PaperPlaneTilt, X } from "@phosphor-icons/react";
+import { Send, X } from "lucide-react";
 import { Button } from "@v2/components/ui/button";
 import { Input } from "@v2/components/ui/input";
 import { useMediaQuery } from "@v2/hooks/use-media-query";
@@ -20,11 +20,11 @@ interface DecisionPanelProps {
 	requireReason?: boolean;
 }
 
-const PANEL_BASE_CLASSES =
-	"-mx-px rounded-t-xl rounded-b-v2-lg border border-b-0 border-v2-border-default bg-v2-bg-page px-4 py-3 shadow-v2-content";
+const PANEL_BASE_CLASSES = "my-2 rounded-v2-lg bg-v2-bg-card px-5 py-4";
 
-const PASS_EDGE_CLASSES = "border-t-2 border-t-v2-status-error";
-const INTRO_EDGE_CLASSES = "border-t-2 border-t-v2-brand-green";
+// A soft tinted glow says which way the decision goes, without a heavy coloured edge.
+const PASS_EDGE_CLASSES = "shadow-v2-pass-glow";
+const INTRO_EDGE_CLASSES = "shadow-v2-intro-glow";
 
 const KBD_CLASSES = "rounded bg-v2-bg-warm px-1.5 py-0.5 font-medium text-2xs text-v2-text-tertiary leading-4";
 
@@ -174,7 +174,7 @@ export function DecisionPanel({
 							aria-pressed={isOn}
 							onClick={() => toggleCategory(category.id)}
 							className={cn(
-								"flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-v2-body font-medium text-xs transition-colors",
+								"flex items-center gap-1.5 rounded-v2-md border px-2.5 py-1.5 font-v2-body font-medium text-xs transition-colors",
 								isOn
 									? "border-transparent bg-v2-bg-tag-dark text-v2-text-inverse"
 									: "border-v2-border-default bg-v2-bg-page text-v2-text-secondary hover:border-v2-text-primary hover:text-v2-text-primary",
@@ -205,7 +205,7 @@ export function DecisionPanel({
 					}
 					aria-required={requireReason}
 					maxLength={2000}
-					className="h-8 flex-1 border-v2-border-default bg-v2-bg-page text-sm shadow-xs"
+					className="h-9 flex-1 rounded-v2-md border-v2-border-default bg-v2-bg-card text-sm shadow-none"
 					onChange={(e) => {
 						setText(e.target.value);
 						onTextChange?.(e.target.value);
@@ -224,13 +224,13 @@ export function DecisionPanel({
 					onClick={submit}
 					disabled={reasonMissing}
 					className={cn(
-						"h-8 shrink-0 items-center gap-1.5 text-sm disabled:opacity-50",
+						"h-9 shrink-0 items-center gap-1.5 rounded-v2-md text-sm disabled:opacity-50",
 						isPass
-							? "flex rounded-full bg-v2-status-error px-4 font-v2-body font-medium text-white transition-[filter] hover:brightness-105"
+							? "flex bg-v2-status-error px-4 font-v2-body font-medium text-white transition-[filter] hover:brightness-105"
 							: "px-3",
 					)}
 				>
-					{!isPass && <PaperPlaneTilt size={14} weight="fill" />}
+					{!isPass && <Send size={14} />}
 					{isPass ? "Pass" : "Send request"}
 					{selected.length > 0 && (
 						<span className="flex size-4 items-center justify-center rounded-full bg-white/25 font-semibold text-2xs tabular-nums">

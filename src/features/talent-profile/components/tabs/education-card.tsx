@@ -1,6 +1,6 @@
 "use client";
 
-import { GraduationCap, Star } from "@phosphor-icons/react";
+import { GraduationCap, Star } from "lucide-react";
 import { Card } from "@v2/components/ui/card";
 import { Skeleton } from "@v2/components/ui/skeleton";
 import { cn } from "@v2/lib/utils";
@@ -51,7 +51,7 @@ function EducationCard({ education, isLoading, className }: EducationCardProps) 
 					<EducationSkeleton />
 				</div>
 			) : education.length === 0 ? (
-				<div className="px-4 pb-3 sm:px-5">
+				<div className="pb-3">
 					<p className="font-v2-body text-xs text-v2-text-muted">No education data available.</p>
 				</div>
 			) : (
@@ -86,7 +86,7 @@ function EducationRow({ edu }: { edu: Education }) {
 					<SourceBadges sources={edu.sources} />
 					{ranking && (
 						<span className="inline-flex items-center gap-1 rounded-v2-full border border-v2-status-warning/30 bg-v2-status-warning-bg px-1.5 py-px text-2xs font-medium uppercase tracking-wider text-v2-status-warning">
-							<Star size={8} weight="fill" />
+							<Star size={8} />
 							{ranking} globally
 						</span>
 					)}
@@ -104,7 +104,7 @@ EducationRow.displayName = "EducationRow";
 
 function EducationSkeleton() {
 	return (
-		<div className="flex gap-3 px-4 py-2.5 sm:px-5">
+		<div className="flex gap-3 py-2.5">
 			<Skeleton className="size-11 shrink-0 rounded-v2-md" />
 			<div className="flex flex-1 flex-col gap-1.5">
 				<Skeleton className="h-3.5 w-44" />
